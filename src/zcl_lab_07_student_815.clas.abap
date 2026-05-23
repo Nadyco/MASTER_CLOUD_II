@@ -1,0 +1,24 @@
+CLASS zcl_lab_07_student_815 DEFINITION
+  PUBLIC
+  FINAL
+  CREATE PUBLIC .
+
+  PUBLIC SECTION.
+    DATA: v_BIRTH_DATE  TYPE zdate READ-ONLY.
+
+    METHODS:
+      set_birth_date  IMPORTING iv_BIRTH_DATE TYPE zdate.
+
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+ENDCLASS.
+
+
+
+CLASS zcl_lab_07_student_815 IMPLEMENTATION.
+
+  METHOD set_birth_date.
+    v_BIRTH_DATE = iv_birth_date.
+  ENDMETHOD.
+
+ENDCLASS.
