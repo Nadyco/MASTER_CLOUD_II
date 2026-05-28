@@ -78,14 +78,17 @@ CLASS zcl_lab_01_ejec_815 IMPLEMENTATION.
 *      iv_last_name  = 'Correa'
 **      iv_surname    =
 *    ).
-    DATA(lo_obj) = NEW zcl_lab_09_account_815( ).
-    lo_obj->set_isban( iv_isban = 'ISBAN1236546' ).
+*    DATA(lo_obj) = NEW zcl_lab_09_account_815( ).
+*    lo_obj->set_isban( iv_isban = 'ISBAN1236546' ).
+*
+*    lo_obj->get_isban(
+*      IMPORTING
+*        ev_isban = DATA(lv_isban)
+*    ).
+*
+    out->write( zcl_lab_10_constructor_815=>log ).
+    DATA(lo_obj) = NEW zcl_lab_10_constructor_815( ).
+    out->write( lo_obj->log ).
 
-    lo_obj->get_isban(
-      IMPORTING
-        ev_isban = DATA(lv_isban)
-    ).
-
-    out->write( lv_isban ).
   ENDMETHOD.
 ENDCLASS.
