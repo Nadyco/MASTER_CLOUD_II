@@ -1,0 +1,21 @@
+CLASS zcl_lab_11_system_815 DEFINITION
+  PUBLIC
+*  FINAL
+  CREATE PUBLIC .
+
+  PUBLIC SECTION.
+    DATA: v_ARCHITECTURE TYPE string VALUE '64BITS'.
+    METHODS get_architecture EXPORTING ev_ARCHITECTURE TYPE string.
+
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+ENDCLASS.
+
+
+
+CLASS zcl_lab_11_system_815 IMPLEMENTATION.
+  METHOD get_architecture.
+    ev_architecture = me->v_architecture.
+  ENDMETHOD.
+
+ENDCLASS.

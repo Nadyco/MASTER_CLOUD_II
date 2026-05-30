@@ -86,9 +86,15 @@ CLASS zcl_lab_01_ejec_815 IMPLEMENTATION.
 *        ev_isban = DATA(lv_isban)
 *    ).
 *
-    out->write( zcl_lab_10_constructor_815=>log ).
-    DATA(lo_obj) = NEW zcl_lab_10_constructor_815( ).
-    out->write( lo_obj->log ).
+*    out->write( zcl_lab_10_constructor_815=>log ).
+*    DATA(lo_obj) = NEW zcl_lab_10_constructor_815( ).
+*    out->write( lo_obj->log ).
+
+    DATA(lo_obj) = NEW zcl_lab_14_grid_815(
+                      iv_view_type = 'LG'
+                      iv_box       = '26'
+                    ).
+
 
   ENDMETHOD.
 ENDCLASS.
