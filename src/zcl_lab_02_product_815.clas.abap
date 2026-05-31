@@ -17,6 +17,7 @@ CLASS zcl_lab_02_product_815 DEFINITION
     DATA: lv_product     TYPE matnr,
           lv_create_date TYPE zdate.
 
+
 ENDCLASS.
 
 

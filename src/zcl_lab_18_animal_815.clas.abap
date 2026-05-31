@@ -1,0 +1,19 @@
+CLASS zcl_lab_18_animal_815 DEFINITION
+  PUBLIC
+*  FINAL
+  CREATE PUBLIC .
+
+  PUBLIC SECTION.
+    METHODS walk RETURNING VALUE(rv_value)  TYPE string.
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+ENDCLASS.
+
+
+
+CLASS zcl_lab_18_animal_815 IMPLEMENTATION.
+  METHOD walk.
+    rv_value = 'El Animal Camina'.
+  ENDMETHOD.
+
+ENDCLASS.

@@ -90,11 +90,63 @@ CLASS zcl_lab_01_ejec_815 IMPLEMENTATION.
 *    DATA(lo_obj) = NEW zcl_lab_10_constructor_815( ).
 *    out->write( lo_obj->log ).
 
-    DATA(lo_obj) = NEW zcl_lab_14_grid_815(
-                      iv_view_type = 'LG'
-                      iv_box       = '26'
-                    ).
+*    DATA(lo_obj) = NEW zcl_lab_14_grid_815(
+*                      iv_view_type = 'LG'
+*                      iv_box       = '26'
+*                    ).
+*
+*    DATA: lo_price    TYPE REF TO zcl_lab_15_flight_price_815,
+*          lo_price_10 TYPE REF TO zcl_lab_16_price_discount_815,
+*          lo_price_20 TYPE REF TO zcl_lab_17_super_discount_815.
+*
+*    SELECT SINGLE FROM /dmo/flight
+*    FIELDS *
+*    WHERE carrier_id = 'SQ'
+*     AND connection_id = '0001'
+*    INTO @DATA(ls_data).
+*
+*    lo_price = NEW zcl_lab_15_flight_price_815( ).
+*
+*    lo_price->add_price( is_flight = ls_data ).
+*    out->write( lo_price->mt_flights ).
+*
+*    lo_price_10 = NEW zcl_lab_16_price_discount_815( ).
+*    lo_price_10->add_price( is_flight = ls_data ).
+*    out->write( lo_price_10->mt_flights ).
+*
+*
+*    lo_price_20 = NEW zcl_lab_17_super_discount_815( ).
+*    lo_price_20->add_price( is_flight = ls_data ).
+*    out->write( lo_price_20->mt_flights ).
+*
+*    out->write( 'Resultado final MT_FLIGHT' ).
+*    out->write( lo_price->mt_flights ).
 
+    DATA(lo_animal) = NEW zcl_lab_18_animal_815( ).
+    DATA(lo_lion) = NEW zcl_lab_19_lion_815( ).
+
+
+    out->write( lo_animal->walk( ) ).
+    out->write( lo_lion->walk( ) ).
+
+    out->write( 'Narrowing Cast' ).
+*    la clase padre o base va a apuntar a la clase hija
+*    lo_animal = lo_lion.
+
+    out->write( lo_animal->walk( ) ).
+    out->write( lo_lion->walk( ) ).
+
+    out->write( 'Widening Cast' ).
+    TRY.
+        lo_lion ?= lo_animal.
+
+      CATCH cx_sy_move_cast_error.
+        out->write( 'casting error' ).
+        EXIT.
+    ENDTRY.
+
+    out->write( lo_animal->walk( ) ).
+    out->write( lo_lion->walk( ) ).
 
   ENDMETHOD.
 ENDCLASS.
