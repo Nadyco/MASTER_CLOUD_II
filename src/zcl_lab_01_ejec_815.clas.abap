@@ -121,32 +121,38 @@ CLASS zcl_lab_01_ejec_815 IMPLEMENTATION.
 *
 *    out->write( 'Resultado final MT_FLIGHT' ).
 *    out->write( lo_price->mt_flights ).
+*
+*    DATA(lo_animal) = NEW zcl_lab_18_animal_815( ).
+*    DATA(lo_lion) = NEW zcl_lab_19_lion_815( ).
+*
+*
+*    out->write( lo_animal->walk( ) ).
+*    out->write( lo_lion->walk( ) ).
+*
+*    out->write( 'Narrowing Cast' ).
+**    la clase padre o base va a apuntar a la clase hija
+**    lo_animal = lo_lion.
+*
+*    out->write( lo_animal->walk( ) ).
+*    out->write( lo_lion->walk( ) ).
+*
+*    out->write( 'Widening Cast' ).
+*    TRY.
+*        lo_lion ?= lo_animal.
+*
+*      CATCH cx_sy_move_cast_error.
+*        out->write( 'casting error' ).
+*        EXIT.
+*    ENDTRY.
+*
+*    out->write( lo_animal->walk( ) ).
+*    out->write( lo_lion->walk( ) ).
 
-    DATA(lo_animal) = NEW zcl_lab_18_animal_815( ).
-    DATA(lo_lion) = NEW zcl_lab_19_lion_815( ).
+    DATA(lo_obj) = NEW zcl_lab_24_partner_815( ).
+    out->write( lo_obj->get_company_capital( ) ).
 
-
-    out->write( lo_animal->walk( ) ).
-    out->write( lo_lion->walk( ) ).
-
-    out->write( 'Narrowing Cast' ).
-*    la clase padre o base va a apuntar a la clase hija
-*    lo_animal = lo_lion.
-
-    out->write( lo_animal->walk( ) ).
-    out->write( lo_lion->walk( ) ).
-
-    out->write( 'Widening Cast' ).
-    TRY.
-        lo_lion ?= lo_animal.
-
-      CATCH cx_sy_move_cast_error.
-        out->write( 'casting error' ).
-        EXIT.
-    ENDTRY.
-
-    out->write( lo_animal->walk( ) ).
-    out->write( lo_lion->walk( ) ).
+    DATA(lo_obj1) = NEW zcl_lab_25_collaborator_815( ).
+    out->write( lo_obj1->get_capital( ) ).
 
   ENDMETHOD.
 ENDCLASS.
