@@ -148,11 +148,39 @@ CLASS zcl_lab_01_ejec_815 IMPLEMENTATION.
 *    out->write( lo_animal->walk( ) ).
 *    out->write( lo_lion->walk( ) ).
 
-    DATA(lo_obj) = NEW zcl_lab_24_partner_815( ).
-    out->write( lo_obj->get_company_capital( ) ).
+    DATA(lo_obj) = NEW zcl_lab_26_flights_815( ).
+    lo_obj->set_conn_id( iv_conn_id = 'CN' ).
 
-    DATA(lo_obj1) = NEW zcl_lab_25_collaborator_815( ).
-    out->write( lo_obj1->get_capital( ) ).
+    lo_obj->get_conn_id(
+      RECEIVING
+        rv_conn_id = DATA(lv_connid)
+    ).
+
+    out->write( lv_connid ).
+
+    lo_obj->get_customer(
+      EXPORTING
+        iv_customer_id = '000026'
+      RECEIVING
+        rs_address     = DATA(ls_customer)
+    ).
+
+    out->write( ls_customer ).
+
+    lo_obj->get_airports(
+      EXPORTING
+        iv_airport_id =  'MAD'
+      RECEIVING
+        rv_airport    = DATA(ls_airport)
+    ).
+
+    out->write( ls_airport ).
+
+
+*    out->write( lo_obj->get_company_capital( ) ).
+*
+*    DATA(lo_obj1) = NEW zcl_lab_25_collaborator_815( ).
+*    out->write( lo_obj1->get_capital( ) ).
 
   ENDMETHOD.
 ENDCLASS.
