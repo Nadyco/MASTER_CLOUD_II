@@ -148,39 +148,59 @@ CLASS zcl_lab_01_ejec_815 IMPLEMENTATION.
 *    out->write( lo_animal->walk( ) ).
 *    out->write( lo_lion->walk( ) ).
 
-    DATA(lo_obj) = NEW zcl_lab_26_flights_815( ).
-    lo_obj->set_conn_id( iv_conn_id = 'CN' ).
-
-    lo_obj->get_conn_id(
-      RECEIVING
-        rv_conn_id = DATA(lv_connid)
-    ).
-
-    out->write( lv_connid ).
-
-    lo_obj->get_customer(
-      EXPORTING
-        iv_customer_id = '000026'
-      RECEIVING
-        rs_address     = DATA(ls_customer)
-    ).
-
-    out->write( ls_customer ).
-
-    lo_obj->get_airports(
-      EXPORTING
-        iv_airport_id =  'MAD'
-      RECEIVING
-        rv_airport    = DATA(ls_airport)
-    ).
-
-    out->write( ls_airport ).
-
-
-*    out->write( lo_obj->get_company_capital( ) ).
+*    DATA(lo_obj) = NEW zcl_lab_26_flights_815( ).
+*    lo_obj->set_conn_id( iv_conn_id = 'CN' ).
 *
-*    DATA(lo_obj1) = NEW zcl_lab_25_collaborator_815( ).
-*    out->write( lo_obj1->get_capital( ) ).
+*    lo_obj->get_conn_id(
+*      RECEIVING rv_conn_id = DATA(lv_connid) ).
+*
+*    out->write( lv_connid ).
+*
+*    lo_obj->get_customer(
+*      EXPORTING  iv_customer_id = '000026'
+*      RECEIVING  rs_address     = DATA(ls_customer)  ).
+*
+*    out->write( ls_customer ).
+*
+*    lo_obj->get_airports(
+*      EXPORTING  iv_airport_id =  'MAD'
+*      RECEIVING  rv_airport    = DATA(ls_airport) ).
+*
+*    out->write( ls_airport ).
+*
+*
+**    out->write( lo_obj->get_company_capital( ) ).
+**
+*    DATA(lo_obj1) = NEW zcl_nc_connections( ).
+*    out->write( lo_obj1->get_connections( i_departure = 'FRA' ) ).
+
+*    DATA: lt_objects TYPE STANDARD TABLE OF REF TO zcl_lab_29_organization_815,
+*          ls_objects TYPE REF TO zcl_lab_29_organization_815.
+
+*    DATA(lo_obj) = NEW zcl_lab_30_org_germany_815( ).
+*    APPEND lo_obj TO lt_objects.
+*
+*    DATA(lo_obj1) = NEW zcl_lab_31_org_france_815( ).
+*    APPEND lo_obj1 TO lt_objects.
+*
+*    LOOP AT lt_objects INTO ls_objects.
+*      out->write( ls_objects->get_location( ) ).
+*    ENDLOOP.
+
+    DATA: lt_objects_if TYPE STANDARD TABLE OF REF TO zif_lab_04_employee_815,
+          ls_objects_if TYPE REF TO zif_lab_04_employee_815.
+
+
+    DATA(lo_obj) = NEW zcl_lab_32_internal_empl_815( ).
+    APPEND lo_obj TO lt_objects_if.
+
+    DATA(lo_obj1) = NEW zcl_lab_33_expatriate_empl_815( ).
+    APPEND lo_obj1 TO lt_objects_if.
+
+    LOOP AT lt_objects_if INTO ls_objects_if.
+      out->write( ls_objects_if->get_employees_count( ) ).
+    ENDLOOP.
+
 
   ENDMETHOD.
 ENDCLASS.
