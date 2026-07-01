@@ -187,19 +187,34 @@ CLASS zcl_lab_01_ejec_815 IMPLEMENTATION.
 *      out->write( ls_objects->get_location( ) ).
 *    ENDLOOP.
 
-    DATA: lt_objects_if TYPE STANDARD TABLE OF REF TO zif_lab_04_employee_815,
-          ls_objects_if TYPE REF TO zif_lab_04_employee_815.
+*    DATA: lt_objects_if TYPE STANDARD TABLE OF REF TO zif_lab_04_employee_815,
+*          ls_objects_if TYPE REF TO zif_lab_04_employee_815.
+*
+*
+*    DATA(lo_obj) = NEW zcl_lab_32_internal_empl_815( ).
+*    APPEND lo_obj TO lt_objects_if.
+*
+*    DATA(lo_obj1) = NEW zcl_lab_33_expatriate_empl_815( ).
+*    APPEND lo_obj1 TO lt_objects_if.
+*
+*    LOOP AT lt_objects_if INTO ls_objects_if.
+*      out->write( ls_objects_if->get_employees_count( ) ).
+*    ENDLOOP.
 
+    DATA: lo_students TYPE REF TO zcl_lab_34_student_815,
+          lo_college  TYPE REF TO zcl_lab_35_college_815.
 
-    DATA(lo_obj) = NEW zcl_lab_32_internal_empl_815( ).
-    APPEND lo_obj TO lt_objects_if.
+**  CREO UNA INSTANCIA DE ESTUDIANTE
+    lo_students = NEW zcl_lab_34_student_815( ).
+    lo_students->set_name( iv_name = 'Nadia Correa' ).
 
-    DATA(lo_obj1) = NEW zcl_lab_33_expatriate_empl_815( ).
-    APPEND lo_obj1 TO lt_objects_if.
+** creo la instancia de college yle paso el estidiante
+   lo_college = new #( ).
+   lo_college->set_enroll_student( ir_enroll = lo_students  ).
 
-    LOOP AT lt_objects_if INTO ls_objects_if.
-      out->write( ls_objects_if->get_employees_count( ) ).
-    ENDLOOP.
+**mostramos el resultado
+
+  out->write( lo_college->get_enroll_student( )->get_name( ) ).
 
 
   ENDMETHOD.
