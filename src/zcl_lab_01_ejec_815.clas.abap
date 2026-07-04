@@ -17,6 +17,21 @@ CLASS zcl_lab_01_ejec_815 IMPLEMENTATION.
 
   METHOD if_oo_adt_classrun~main.
 
+    DATA:lo_phone TYPE REF TO zcl_lab_36_phone_815.
+    DATA:lo_screen TYPE REF TO zcl_lab_37_screen_815.
+
+    lo_screen = NEW zcl_lab_37_screen_815( ).
+
+    lo_phone = NEW zcl_lab_36_phone_815( io_screen = lo_screen ).
+
+    lo_screen->set_screen( iv_screen = 'Screen' ).
+
+    out->write( lo_phone->o_screen->get_screen( ) ).
+
+
+
+
+
 *    DATA: lo_obj TYPE REF TO zcl_lab_04_person_815.
     "primer forma de instanciar clase
 *    CREATE OBJECT lo_obj.
@@ -201,20 +216,20 @@ CLASS zcl_lab_01_ejec_815 IMPLEMENTATION.
 *      out->write( ls_objects_if->get_employees_count( ) ).
 *    ENDLOOP.
 
-    DATA: lo_students TYPE REF TO zcl_lab_34_student_815,
-          lo_college  TYPE REF TO zcl_lab_35_college_815.
+*    DATA: lo_students TYPE REF TO zcl_lab_34_student_815,
+*          lo_college  TYPE REF TO zcl_lab_35_college_815.
 
-**  CREO UNA INSTANCIA DE ESTUDIANTE
-    lo_students = NEW zcl_lab_34_student_815( ).
-    lo_students->set_name( iv_name = 'Nadia Correa' ).
-
-** creo la instancia de college yle paso el estidiante
-   lo_college = new #( ).
-   lo_college->set_enroll_student( ir_enroll = lo_students  ).
-
-**mostramos el resultado
-
-  out->write( lo_college->get_enroll_student( )->get_name( ) ).
+***  CREO UNA INSTANCIA DE ESTUDIANTE
+*    lo_students = NEW zcl_lab_34_student_815( ).
+*    lo_students->set_name( iv_name = 'Nadia Correa' ).
+*
+*** creo la instancia de college yle paso el estidiante
+*   lo_college = new #( ).
+*   lo_college->set_enroll_student( ir_enroll = lo_students  ).
+*
+***mostramos el resultado
+*
+*  out->write( lo_college->get_enroll_student( )->get_name( ) ).
 
 
   ENDMETHOD.
