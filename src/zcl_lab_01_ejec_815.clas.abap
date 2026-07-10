@@ -17,16 +17,47 @@ CLASS zcl_lab_01_ejec_815 IMPLEMENTATION.
 
   METHOD if_oo_adt_classrun~main.
 
-    DATA:lo_phone TYPE REF TO zcl_lab_36_phone_815.
-    DATA:lo_screen TYPE REF TO zcl_lab_37_screen_815.
+    DATA(lo_touch_screen) = NEW zcl_lab_42_screen_815( iv_screen_type = 'A01' ).
+    DATA(lo_on_toch_screen) = NEW zcl_lab_43_navigation_815( ).
 
-    lo_screen = NEW zcl_lab_37_screen_815( ).
+    SET HANDLER lo_on_toch_screen->on_touch_screen FOR lo_touch_screen.
 
-    lo_phone = NEW zcl_lab_36_phone_815( io_screen = lo_screen ).
+    lo_touch_screen->element_selected( ).
 
-    lo_screen->set_screen( iv_screen = 'Screen' ).
+    IF NOT lo_on_toch_screen->posh IS INITIAL AND
+       NOT lo_on_toch_screen->posv IS INITIAL.
 
-    out->write( lo_phone->o_screen->get_screen( ) ).
+      out->write( 'se disparo el evento on_touch_screen' ).
+      out->write( |Posicion Horizontal: { lo_on_toch_screen->posh } | ).
+      out->write( |Posicion Vertical: { lo_on_toch_screen->posv } | ).
+      out->write( |Tipo Sender: { lo_on_toch_screen->sender_type } | ).
+
+    ELSE.
+      out->write( 'NO se disparo el evento on_touch_screen' ).
+    ENDIF.
+
+*    DATA(lo_obj) = NEW zcl_lab_38_prod_price_815( ).
+*    DATA(lo_obj1) = NEW zcl_lab_38_prod_price_815( ).
+*
+*    lo_obj->price = 10.
+*
+*    lo_obj1->price = 20.
+*
+*    lo_obj = lo_obj1.
+*
+*    out->write( lo_obj ).
+*    out->write( lo_obj1 ).
+
+*    DATA:lo_phone TYPE REF TO zcl_lab_36_phone_815.
+*    DATA:lo_screen TYPE REF TO zcl_lab_37_screen_815.
+*
+*    lo_screen = NEW zcl_lab_37_screen_815( ).
+*
+*    lo_phone = NEW zcl_lab_36_phone_815( io_screen = lo_screen ).
+*
+*    lo_screen->set_screen( iv_screen = 'Screen' ).
+*
+*    out->write( lo_phone->o_screen->get_screen( ) ).
 
 
 
