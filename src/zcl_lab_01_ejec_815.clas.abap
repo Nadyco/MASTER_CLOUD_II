@@ -17,24 +17,40 @@ CLASS zcl_lab_01_ejec_815 IMPLEMENTATION.
 
   METHOD if_oo_adt_classrun~main.
 
-    DATA(lo_touch_screen) = NEW zcl_lab_42_screen_815( iv_screen_type = 'A01' ).
-    DATA(lo_on_toch_screen) = NEW zcl_lab_43_navigation_815( ).
+    DATA(lo_close_window) = NEW zcl_lab44_operating_system_815( ).
+    DATA(lo_on_close_windows) = NEW zcl_lab_45_chrome_815( ).
 
-    SET HANDLER lo_on_toch_screen->on_touch_screen FOR lo_touch_screen.
+    out->write( 'Activation False' ).
+    SET HANDLER lo_on_close_windows->on_close_window FOR lo_close_window ACTIVATION abap_false.
 
-    lo_touch_screen->element_selected( ).
+    lo_close_window->mouse_movement(  ).
 
-    IF NOT lo_on_toch_screen->posh IS INITIAL AND
-       NOT lo_on_toch_screen->posv IS INITIAL.
+    out->write( lo_close_window->mouse_movement(  ) ).
 
-      out->write( 'se disparo el evento on_touch_screen' ).
-      out->write( |Posicion Horizontal: { lo_on_toch_screen->posh } | ).
-      out->write( |Posicion Vertical: { lo_on_toch_screen->posv } | ).
-      out->write( |Tipo Sender: { lo_on_toch_screen->sender_type } | ).
+    out->write( 'Activation True' ).
+    SET HANDLER lo_on_close_windows->on_close_window FOR lo_close_window .
 
-    ELSE.
-      out->write( 'NO se disparo el evento on_touch_screen' ).
-    ENDIF.
+    lo_close_window->mouse_movement(  ).
+
+    out->write( lo_close_window->mouse_movement(  ) ).
+*    DATA(lo_touch_screen) = NEW zcl_lab_42_screen_815( iv_screen_type = 'A01' ).
+*    DATA(lo_on_toch_screen) = NEW zcl_lab_43_navigation_815( ).
+*
+*    SET HANDLER lo_on_toch_screen->on_touch_screen FOR lo_touch_screen.
+*
+*    lo_touch_screen->element_selected( ).
+*
+*    IF NOT lo_on_toch_screen->posh IS INITIAL AND
+*       NOT lo_on_toch_screen->posv IS INITIAL.
+*
+*      out->write( 'se disparo el evento on_touch_screen' ).
+*      out->write( |Posicion Horizontal: { lo_on_toch_screen->posh } | ).
+*      out->write( |Posicion Vertical: { lo_on_toch_screen->posv } | ).
+*      out->write( |Tipo Sender: { lo_on_toch_screen->sender_type } | ).
+*
+*    ELSE.
+*      out->write( 'NO se disparo el evento on_touch_screen' ).
+*    ENDIF.
 
 *    DATA(lo_obj) = NEW zcl_lab_38_prod_price_815( ).
 *    DATA(lo_obj1) = NEW zcl_lab_38_prod_price_815( ).
