@@ -17,22 +17,79 @@ CLASS zcl_lab_01_ejec_815 IMPLEMENTATION.
 
   METHOD if_oo_adt_classrun~main.
 
-    DATA(lo_close_window) = NEW zcl_lab44_operating_system_815( ).
-    DATA(lo_on_close_windows) = NEW zcl_lab_45_chrome_815( ).
+    DATA(lo_manage) = NEW zcl_lab_53_check_user_815( ).
+    DATA: lv_num1   TYPE i VALUE 10,
+          lv_num2   TYPE i VALUE 0,
+          lv_result TYPE i.
 
-    out->write( 'Activation False' ).
-    SET HANDLER lo_on_close_windows->on_close_window FOR lo_close_window ACTIVATION abap_false.
+    TRY.
 
-    lo_close_window->mouse_movement(  ).
+        TRY.
 
-    out->write( lo_close_window->mouse_movement(  ) ).
+            lv_result = lv_num1 + lv_num2.
+            lv_result = lv_num1 / lv_num2.
+            lv_result = lv_num1 - lv_num2.
 
-    out->write( 'Activation True' ).
-    SET HANDLER lo_on_close_windows->on_close_window FOR lo_close_window .
+          CATCH zcx_lab_52_operations_815 INTO DATA(lo_excep).
+            out->write( lo_excep->get_text( ) ).
 
-    lo_close_window->mouse_movement(  ).
+          CLEANUP.
+            out->write( |Cleanup1 ......| ).
+            out->write( |Resultado { lv_result }| ).
 
-    out->write( lo_close_window->mouse_movement(  ) ).
+        ENDTRY.
+
+      CATCH cx_sy_zerodivide INTO DATA(lo_excep1).
+        out->write( lo_excep1->get_text( ) ).
+        lv_num2 = 2.
+        RETRY.
+      CLEANUP.
+        out->write( |Cleanup2 ......| ).
+
+    ENDTRY.
+
+    out->write( |Resultado { lv_result }| ).
+*    DATA(lo_manage) = NEW zcl_lab_53_check_user_815( ).
+*    DATA: lv_ope1 TYPE i VALUE 2,
+*          lv_div  TYPE i VALUE 0.
+*
+*    TRY.
+*        lo_manage->check_user( iv_uname = ' ' ).
+*        DATA(result) = lv_ope1 / lv_div.
+*
+*      CATCH zcx_lab_52_operations_815 INTO DATA(lo_excep).
+*        out->write( lo_excep->get_text( ) ).
+*        "handle exception
+*
+*      CATCH cx_sy_zerodivide INTO DATA(lo_excep1).
+*        out->write( lo_excep1->get_text( ) ).
+*        lv_div = 2.
+*        RETRY.
+*
+*    ENDTRY.
+*
+*
+*    out->write( |Resultado { result }| ).
+
+
+*     CATCH zcx_lab_52_operations_815.
+
+*    DATA(lo_close_window) = NEW zcl_lab44_operating_system_815( ).
+*    DATA(lo_on_close_windows) = NEW zcl_lab_45_chrome_815( ).
+*
+*    out->write( 'Activation False' ).
+*    SET HANDLER lo_on_close_windows->on_close_window FOR lo_close_window ACTIVATION abap_false.
+*
+*    lo_close_window->mouse_movement(  ).
+*
+*    out->write( lo_close_window->mouse_movement(  ) ).
+*
+*    out->write( 'Activation True' ).
+*    SET HANDLER lo_on_close_windows->on_close_window FOR lo_close_window .
+*
+*    lo_close_window->mouse_movement(  ).
+*
+*    out->write( lo_close_window->mouse_movement(  ) ).
 *    DATA(lo_touch_screen) = NEW zcl_lab_42_screen_815( iv_screen_type = 'A01' ).
 *    DATA(lo_on_toch_screen) = NEW zcl_lab_43_navigation_815( ).
 *
