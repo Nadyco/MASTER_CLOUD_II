@@ -12,7 +12,7 @@ ENDCLASS.
 
 
 
-CLASS zcl_lab_32_internal_empl_815 IMPLEMENTATION.
+CLASS ZCL_LAB_32_INTERNAL_EMPL_815 IMPLEMENTATION.
 
 
   METHOD zif_lab_04_employee_815~get_employees_count.

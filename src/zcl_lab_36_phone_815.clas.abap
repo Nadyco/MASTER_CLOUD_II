@@ -14,9 +14,10 @@ ENDCLASS.
 
 
 
-CLASS zcl_lab_36_phone_815 IMPLEMENTATION.
+CLASS ZCL_LAB_36_PHONE_815 IMPLEMENTATION.
+
+
   METHOD constructor.
     me->o_screen = io_screen.
   ENDMETHOD.
-
 ENDCLASS.

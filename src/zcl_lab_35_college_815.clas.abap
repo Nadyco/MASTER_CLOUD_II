@@ -15,13 +15,15 @@ ENDCLASS.
 
 
 
-CLASS zcl_lab_35_college_815 IMPLEMENTATION.
+CLASS ZCL_LAB_35_COLLEGE_815 IMPLEMENTATION.
+
+
   METHOD get_enroll_student.
     rr_enroll = me->lo_student.
   ENDMETHOD.
 
+
   METHOD set_enroll_student.
     me->lo_student = ir_enroll.
   ENDMETHOD.
-
 ENDCLASS.

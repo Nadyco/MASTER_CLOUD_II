@@ -16,9 +16,11 @@ CLASS zcl_lab_03_contract_815 DEFINITION
 ENDCLASS.
 
 
-CLASS zcl_lab_03_contract_815 IMPLEMENTATION.
+
+CLASS ZCL_LAB_03_CONTRACT_815 IMPLEMENTATION.
+
+
   METHOD set_creation_dat.
     lv_CREATION_DATE = cl_abap_context_info=>get_system_date( ).
   ENDMETHOD.
-
 ENDCLASS.

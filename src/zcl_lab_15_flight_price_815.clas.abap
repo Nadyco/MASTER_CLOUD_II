@@ -14,11 +14,12 @@ ENDCLASS.
 
 
 
-CLASS zcl_lab_15_flight_price_815 IMPLEMENTATION.
+CLASS ZCL_LAB_15_FLIGHT_PRICE_815 IMPLEMENTATION.
+
+
   METHOD add_price.
     IF NOT is_flight IS INITIAL.
       APPEND is_flight TO mt_flights.
     ENDIF.
   ENDMETHOD.
-
 ENDCLASS.

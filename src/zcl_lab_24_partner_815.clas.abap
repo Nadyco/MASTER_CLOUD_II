@@ -11,11 +11,12 @@ ENDCLASS.
 
 
 
-CLASS zcl_lab_24_partner_815 IMPLEMENTATION.
+CLASS ZCL_LAB_24_PARTNER_815 IMPLEMENTATION.
+
+
   METHOD get_company_capital.
     DATA(lo_obj) = NEW zcl_lab_23_company_815( ).
     lo_obj->capital = 'Prueba'.
     rv_value = lo_obj->capital.
   ENDMETHOD.
-
 ENDCLASS.

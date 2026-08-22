@@ -13,9 +13,10 @@ ENDCLASS.
 
 
 
-CLASS zcl_lab_20_person_815 IMPLEMENTATION.
+CLASS ZCL_LAB_20_PERSON_815 IMPLEMENTATION.
+
+
   METHOD set_name.
     me->name = iv_name.
   ENDMETHOD.
-
 ENDCLASS.

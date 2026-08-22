@@ -17,13 +17,15 @@ ENDCLASS.
 
 
 
-CLASS zcl_lab_09_account_815 IMPLEMENTATION.
+CLASS ZCL_LAB_09_ACCOUNT_815 IMPLEMENTATION.
+
+
   METHOD get_isban.
     ev_isban = me->v_isban.
   ENDMETHOD.
 
+
   METHOD set_isban.
     me->v_isban = iv_isban .
   ENDMETHOD.
-
 ENDCLASS.

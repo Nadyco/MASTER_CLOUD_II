@@ -12,9 +12,10 @@ ENDCLASS.
 
 
 
-CLASS zcl_lab_19_lion_815 IMPLEMENTATION.
+CLASS ZCL_LAB_19_LION_815 IMPLEMENTATION.
+
+
   METHOD walk.
     rv_value = 'El Lion Camina'.
   ENDMETHOD.
-
 ENDCLASS.

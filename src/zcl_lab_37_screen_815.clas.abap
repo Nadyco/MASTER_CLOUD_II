@@ -16,13 +16,15 @@ ENDCLASS.
 
 
 
-CLASS zcl_lab_37_screen_815 IMPLEMENTATION.
+CLASS ZCL_LAB_37_SCREEN_815 IMPLEMENTATION.
+
+
   METHOD get_screen.
     rv_screen = me->screen_type.
   ENDMETHOD.
 
+
   METHOD set_screen.
     me->screen_type = iv_screen.
   ENDMETHOD.
-
 ENDCLASS.

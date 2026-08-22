@@ -13,9 +13,10 @@ ENDCLASS.
 
 
 
-CLASS zcl_lab_11_system_815 IMPLEMENTATION.
+CLASS ZCL_LAB_11_SYSTEM_815 IMPLEMENTATION.
+
+
   METHOD get_architecture.
     ev_architecture = me->v_architecture.
   ENDMETHOD.
-
 ENDCLASS.

@@ -15,9 +15,10 @@ ENDCLASS.
 
 
 
-CLASS zcl_lab_13_view_815 IMPLEMENTATION.
+CLASS ZCL_LAB_13_VIEW_815 IMPLEMENTATION.
+
+
   METHOD constructor.
     me->view_type = iv_view_type.
   ENDMETHOD.
-
 ENDCLASS.

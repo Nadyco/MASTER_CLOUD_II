@@ -16,14 +16,15 @@ ENDCLASS.
 
 
 
-CLASS zcl_lab_04_person_815 IMPLEMENTATION.
+CLASS ZCL_LAB_04_PERSON_815 IMPLEMENTATION.
+
 
   METHOD get_age.
     ev_age = lv_age.
   ENDMETHOD.
 
+
   METHOD set_age.
     lv_age = iv_age.
   ENDMETHOD.
-
 ENDCLASS.

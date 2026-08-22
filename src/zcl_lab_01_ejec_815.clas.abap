@@ -17,38 +17,74 @@ CLASS zcl_lab_01_ejec_815 IMPLEMENTATION.
 
   METHOD if_oo_adt_classrun~main.
 
-    DATA(lo_manage) = NEW zcl_lab_53_check_user_815( ).
-    DATA: lv_num1   TYPE i VALUE 10,
-          lv_num2   TYPE i VALUE 0,
-          lv_result TYPE i.
+    DATA: go_file TYPE REF TO zif_lab_06_file.
+    DATA: go_factory TYPE REF TO zcl_lab_65_factory.
 
-    TRY.
+    go_factory = NEW #( ).
+    go_file = go_factory->create_file( iv_file = 'WORK' ).
 
-        TRY.
+    out->write(  go_file->get_file_type( ) ).
 
-            lv_result = lv_num1 + lv_num2.
-            lv_result = lv_num1 / lv_num2.
-            lv_result = lv_num1 - lv_num2.
+*    DATA: go_singleton1 TYPE REF TO zcl_lab_62_context_815,
+*          go_singleton2 TYPE REF TO zcl_lab_62_context_815.
+*
+*
+*    go_singleton1 = zcl_lab_62_context_815=>get_instances( ).
+*
+*    wait up to 5 seconds.
+*
+*    go_singleton2 = zcl_lab_62_context_815=>get_instances( ).
+*
+*    out->write( go_singleton1->mv_tyme ).
+*    out->write( go_singleton2->mv_tyme ).
 
-          CATCH zcx_lab_52_operations_815 INTO DATA(lo_excep).
-            out->write( lo_excep->get_text( ) ).
 
-          CLEANUP.
-            out->write( |Cleanup1 ......| ).
-            out->write( |Resultado { lv_result }| ).
 
-        ENDTRY.
+*    DATA(lo_obj) = NEW zcl_lab_59_calculator( ).
+*
+*    lo_obj->sum_up(
+*      EXPORTING
+*        iv_val1   =  2
+*        iv_val2   = 3
+*      RECEIVING
+*        rv_result = DATA(lv_result)
+*    ).
+*
+*    out->write( lv_result ).
 
-      CATCH cx_sy_zerodivide INTO DATA(lo_excep1).
-        out->write( lo_excep1->get_text( ) ).
-        lv_num2 = 2.
-        RETRY.
-      CLEANUP.
-        out->write( |Cleanup2 ......| ).
 
-    ENDTRY.
-
-    out->write( |Resultado { lv_result }| ).
+*    DATA(lo_manage) = NEW zcl_lab_53_check_user_815( ).
+*    DATA: lv_num1   TYPE i VALUE 10,
+*          lv_num2   TYPE i VALUE 0,
+*          lv_result TYPE i.
+*
+*    TRY.
+*
+*        TRY.
+*
+*            lv_result = lv_num1 + lv_num2.
+*            lv_result = lv_num1 / lv_num2.
+*            lv_result = lv_num1 - lv_num2.
+*
+*          CATCH zcx_lab_52_operations_815 INTO DATA(lo_excep).
+*            out->write( lo_excep->get_text( ) ).
+*
+*          CLEANUP.
+*            out->write( |Cleanup1 ......| ).
+*            out->write( |Resultado { lv_result }| ).
+*
+*        ENDTRY.
+*
+*      CATCH cx_sy_zerodivide INTO DATA(lo_excep1).
+*        out->write( lo_excep1->get_text( ) ).
+*        lv_num2 = 2.
+*        RETRY.
+*      CLEANUP.
+*        out->write( |Cleanup2 ......| ).
+*
+*    ENDTRY.
+*
+*    out->write( |Resultado { lv_result }| ).
 *    DATA(lo_manage) = NEW zcl_lab_53_check_user_815( ).
 *    DATA: lv_ope1 TYPE i VALUE 2,
 *          lv_div  TYPE i VALUE 0.

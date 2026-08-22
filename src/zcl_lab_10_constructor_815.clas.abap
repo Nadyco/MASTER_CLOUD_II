@@ -14,14 +14,17 @@ CLASS zcl_lab_10_constructor_815 DEFINITION
   PRIVATE SECTION.
 ENDCLASS.
 
-CLASS zcl_lab_10_constructor_815 IMPLEMENTATION.
+
+
+CLASS ZCL_LAB_10_CONSTRUCTOR_815 IMPLEMENTATION.
+
 
   METHOD constructor.
     log = | { log }- Instance Constructor |.
   ENDMETHOD.
 
+
   METHOD class_constructor.
     log = | { log }- Static Constructor |.
   ENDMETHOD.
-
 ENDCLASS.

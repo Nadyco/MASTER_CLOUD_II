@@ -11,9 +11,10 @@ ENDCLASS.
 
 
 
-CLASS zcl_lab_18_animal_815 IMPLEMENTATION.
+CLASS ZCL_LAB_18_ANIMAL_815 IMPLEMENTATION.
+
+
   METHOD walk.
     rv_value = 'El Animal Camina'.
   ENDMETHOD.
-
 ENDCLASS.

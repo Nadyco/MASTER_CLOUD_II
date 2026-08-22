@@ -11,7 +11,10 @@ CLASS zcl_lab_51_wz_friend_815 DEFINITION
 ENDCLASS.
 
 
-CLASS zcl_lab_51_wz_friend_815 IMPLEMENTATION.
+
+CLASS ZCL_LAB_51_WZ_FRIEND_815 IMPLEMENTATION.
+
+
   METHOD get_helper.
 *    Se instancia la clase amiga para acceder a sus componentes
     DATA(lo_components) = NEW zcl_lab_50_work_zone_815( ).

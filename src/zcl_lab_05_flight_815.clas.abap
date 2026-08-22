@@ -15,7 +15,8 @@ ENDCLASS.
 
 
 
-CLASS zcl_lab_05_flight_815 IMPLEMENTATION.
+CLASS ZCL_LAB_05_FLIGHT_815 IMPLEMENTATION.
+
 
   METHOD check_flight.
     SELECT FROM /dmo/flight
@@ -28,5 +29,4 @@ CLASS zcl_lab_05_flight_815 IMPLEMENTATION.
       rv_exist = abap_false.
     ENDIF.
   ENDMETHOD.
-
 ENDCLASS.

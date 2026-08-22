@@ -19,11 +19,12 @@ ENDCLASS.
 
 
 
-CLASS zcl_lab_43_navigation_815 IMPLEMENTATION.
+CLASS ZCL_LAB_43_NAVIGATION_815 IMPLEMENTATION.
+
+
   METHOD on_touch_screen.
     me->posh = ev_posh.
     me->posv = ev_posh.
     me->sender_type = sender->screen_type.
   ENDMETHOD.
-
 ENDCLASS.

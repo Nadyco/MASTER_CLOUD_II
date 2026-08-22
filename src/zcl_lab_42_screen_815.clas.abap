@@ -23,13 +23,15 @@ ENDCLASS.
 
 
 
-CLASS zcl_lab_42_screen_815 IMPLEMENTATION.
+CLASS ZCL_LAB_42_SCREEN_815 IMPLEMENTATION.
+
 
   METHOD constructor.
 
     me->screen_type = iv_screen_type.
 
   ENDMETHOD.
+
 
   METHOD element_selected.
 
@@ -39,5 +41,4 @@ CLASS zcl_lab_42_screen_815 IMPLEMENTATION.
         ev_posv =  '20'.
 
   ENDMETHOD.
-
 ENDCLASS.

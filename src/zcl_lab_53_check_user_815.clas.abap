@@ -14,7 +14,9 @@ ENDCLASS.
 
 
 
-CLASS zcl_lab_53_check_user_815 IMPLEMENTATION.
+CLASS ZCL_LAB_53_CHECK_USER_815 IMPLEMENTATION.
+
+
   METHOD check_user.
 
     IF iv_uname = 'CB9980000179'.
@@ -27,5 +29,4 @@ CLASS zcl_lab_53_check_user_815 IMPLEMENTATION.
     ENDIF.
 
   ENDMETHOD.
-
 ENDCLASS.

@@ -22,12 +22,13 @@ ENDCLASS.
 
 
 
-CLASS zcl_lab_08_work_record_815 IMPLEMENTATION.
+CLASS ZCL_LAB_08_WORK_RECORD_815 IMPLEMENTATION.
+
+
   METHOD open_new_record.
         v_DATE        = iv_date.
         v_FIRST_NAME  = iv_first_name.
         v_LAST_NAME   = iv_last_name.
         v_SURNAME     = iv_surname.
   ENDMETHOD.
-
 ENDCLASS.

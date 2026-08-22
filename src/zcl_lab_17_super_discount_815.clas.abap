@@ -14,7 +14,9 @@ CLASS zcl_lab_17_super_discount_815 DEFINITION
 ENDCLASS.
 
 
-CLASS zcl_lab_17_super_discount_815 IMPLEMENTATION.
+
+CLASS ZCL_LAB_17_SUPER_DISCOUNT_815 IMPLEMENTATION.
+
 
   METHOD add_price.
 *   como la estructura del padre es importing no lo puedo modificar
@@ -26,5 +28,4 @@ CLASS zcl_lab_17_super_discount_815 IMPLEMENTATION.
     super->add_price( is_flight = ls_flight ).
 
   ENDMETHOD.
-
 ENDCLASS.

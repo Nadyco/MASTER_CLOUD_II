@@ -13,7 +13,10 @@ CLASS zcl_lab_16_price_discount_815 DEFINITION
     DATA: ls_flight TYPE  /dmo/flight.
 ENDCLASS.
 
-CLASS zcl_lab_16_price_discount_815 IMPLEMENTATION.
+
+
+CLASS ZCL_LAB_16_PRICE_DISCOUNT_815 IMPLEMENTATION.
+
 
   METHOD add_price.
 *   como la estructura del padre es importing no lo puedo modificar
@@ -24,5 +27,4 @@ CLASS zcl_lab_16_price_discount_815 IMPLEMENTATION.
 
     super->add_price( is_flight = ls_flight ).
   ENDMETHOD.
-
 ENDCLASS.

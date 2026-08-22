@@ -15,9 +15,12 @@ CLASS zcl_lab_50_work_zone_815 DEFINITION
 
 ENDCLASS.
 
-CLASS zcl_lab_50_work_zone_815 IMPLEMENTATION.
+
+
+CLASS ZCL_LAB_50_WORK_ZONE_815 IMPLEMENTATION.
+
+
   METHOD set_work_zone.
     me->work_zonte = is_wzone.
   ENDMETHOD.
-
 ENDCLASS.

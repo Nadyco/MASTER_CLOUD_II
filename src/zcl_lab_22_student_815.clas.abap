@@ -12,9 +12,10 @@ ENDCLASS.
 
 
 
-CLASS zcl_lab_22_student_815 IMPLEMENTATION.
+CLASS ZCL_LAB_22_STUDENT_815 IMPLEMENTATION.
+
+
   METHOD assign_student.
     DATA(lo_obj) = NEW zcl_lab_21_classroom_815( ).
   ENDMETHOD.
-
 ENDCLASS.

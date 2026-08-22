@@ -21,7 +21,7 @@ ENDCLASS.
 
 
 
-CLASS zcl_lab_26_flights_815 IMPLEMENTATION.
+CLASS ZCL_LAB_26_FLIGHTS_815 IMPLEMENTATION.
 
 
   METHOD zif_lab_01_flight_815~get_conn_id.
@@ -33,6 +33,7 @@ CLASS zcl_lab_26_flights_815 IMPLEMENTATION.
     me->zif_lab_01_flight_815~conn_id = iv_CONN_ID.
   ENDMETHOD.
 
+
   METHOD zif_lab_02_customer_815~get_customer.
 
     SELECT SINGLE FROM /dmo/customer
@@ -42,6 +43,7 @@ CLASS zcl_lab_26_flights_815 IMPLEMENTATION.
 
   ENDMETHOD.
 
+
   METHOD zif_lab_03_airports_815~get_airports.
 
     SELECT SINGLE FROM /dmo/airport
@@ -50,5 +52,4 @@ CLASS zcl_lab_26_flights_815 IMPLEMENTATION.
     INTO @rv_AIRPORT.
 
   ENDMETHOD.
-
 ENDCLASS.

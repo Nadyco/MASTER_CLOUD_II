@@ -14,12 +14,13 @@ ENDCLASS.
 
 
 
-CLASS zcl_lab44_operating_system_815 IMPLEMENTATION.
+CLASS ZCL_LAB44_OPERATING_SYSTEM_815 IMPLEMENTATION.
+
+
   METHOD mouse_movement.
     rv_text = 'Raise event: mouse movement'.
 *    dispara el evento
     RAISE EVENT zif_lab_05_browser_815~close_window.
 
   ENDMETHOD.
-
 ENDCLASS.
