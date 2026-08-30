@@ -17,13 +17,14 @@ CLASS zcl_lab_01_ejec_815 IMPLEMENTATION.
 
   METHOD if_oo_adt_classrun~main.
 
-    DATA: go_file TYPE REF TO zif_lab_06_file.
-    DATA: go_factory TYPE REF TO zcl_lab_65_factory.
-
-    go_factory = NEW #( ).
-    go_file = go_factory->create_file( iv_file = 'WORK' ).
-
-    out->write(  go_file->get_file_type( ) ).
+     data(lo_obj) = new zcl_lab_67_package_a( ).
+*    DATA: go_file TYPE REF TO zif_lab_06_file.
+*    DATA: go_factory TYPE REF TO zcl_lab_65_factory.
+*
+*    go_factory = NEW #( ).
+*    go_file = go_factory->create_file( iv_file = 'WORK' ).
+*
+*    out->write(  go_file->get_file_type( ) ).
 
 *    DATA: go_singleton1 TYPE REF TO zcl_lab_62_context_815,
 *          go_singleton2 TYPE REF TO zcl_lab_62_context_815.
