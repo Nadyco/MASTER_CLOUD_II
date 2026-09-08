@@ -1,0 +1,4 @@
+@EndUserText.label: 'Service definition sobre la CDS consume'
+define service ZSD_CUSTOM_DETAIL_NNC {
+  expose ZCDS_CUSTOM_DETAIL_NNC as customer;
+}
