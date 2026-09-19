@@ -23,19 +23,28 @@ ENDCLASS.
 
 
 
-CLASS ZCL_LAB_60_TEST_CALC_815 IMPLEMENTATION.
+CLASS zcl_lab_60_test_calc_815 IMPLEMENTATION.
 
 
   METHOD calculator_test.
 
     DATA: lv_result_ut  TYPE i.
 
+*    mo_calc->sum_up(
+*      EXPORTING
+*        iv_val1   = 2
+*        iv_val2   = 3
+*      RECEIVING
+*        rv_result =  lv_result_ut ).
+*
+
     mo_calc->sum_up(
       EXPORTING
-        iv_val1   = 2
-        iv_val2   = 3
+        iv_num1   = 2
+        iv_num2   = 3
       RECEIVING
-        rv_result =  lv_result_ut ).
+        resultado = lv_result_ut
+    ).
 
 
     cl_abap_unit_assert=>assert_equals(

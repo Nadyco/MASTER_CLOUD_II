@@ -7,6 +7,7 @@ CLASS zcl_lab_01_ejec_815 DEFINITION
 
     INTERFACES if_oo_adt_classrun .
   PROTECTED SECTION.
+
   PRIVATE SECTION.
 ENDCLASS.
 

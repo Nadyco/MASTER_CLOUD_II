@@ -3,10 +3,12 @@
 {
 "FROM":
 [
-"/DMO/TRAVEL"
+"ZDT_INCT_H_NC"
 ],
 "ASSOCIATED":
-[],
+[
+"ZI_INCT_NC"
+],
 "BASE":
 [],
 "ANNO_REF":
