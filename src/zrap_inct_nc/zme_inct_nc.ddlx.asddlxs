@@ -1,0 +1,66 @@
+@Metadata.layer: #CORE
+@UI:{ headerInfo: {
+          typeName: 'Incident',
+          typeNamePlural: 'Incidents',
+          title: { type: #STANDARD,
+              value: 'IncidentId'
+            } },
+
+      presentationVariant: [{ sortOrder: [{by: 'IncidentId',
+                                            direction: #ASC }],
+                               visualizations: [{ type: #AS_LINEITEM  }] }]
+}
+annotate entity ZC_INCT_NC with
+{
+  @UI.lineItem: [{
+      position: 10,
+      importance:#HIGH,
+      emphasized: true
+  }]
+  IncidentId;
+
+  @UI.lineItem: [{
+    position: 20,
+    importance:#HIGH,
+    emphasized: true
+  }]
+  Title;
+
+  @UI.lineItem: [{
+  position: 30,
+  importance:#HIGH,
+  emphasized: true
+  }]
+  Description;
+
+  @UI.lineItem: [{
+    position: 40,
+    importance:#HIGH,
+    emphasized: true
+  }]
+  //filtros
+  @UI.selectionField: [{ position: 40 }]
+  @Consumption.valueHelpDefinition: [{ entity: { name: 'ZI_STATUS_VH_NC',
+                                                 element: 'StatusCode'
+                                                },
+
+                                        useForValidation: true
+
+
+                                    }]
+  @UI.textArrangement: #TEXT_FIRST
+  Status;
+
+
+  //Priority;
+  //CreatedDate;
+  //ChangedDate;
+  //LocalCreatedBy;
+  //LocalCreatedAt;
+  //LocalLastChangedBy;
+  //LocalLastChangedAt;
+  //LastChangedAt;
+  ///* Associations */
+  //_History;
+
+}

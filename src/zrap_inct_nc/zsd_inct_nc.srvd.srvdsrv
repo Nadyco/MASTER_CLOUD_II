@@ -1,0 +1,5 @@
+@EndUserText.label: 'Incident - Servide Definitions'
+define service ZSD_INCT_NC {
+  expose ZC_INCT_NC   as Incidents;
+  expose ZC_INCT_H_NC as History;
+}

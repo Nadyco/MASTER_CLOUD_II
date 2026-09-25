@@ -4,7 +4,8 @@ define role ZAC_01_LOG_815 {
     grant
         select
             on
-                ZCDS_01_LOG_815
+               ZCDS_01_LOG_815
+                   
                     where
                         CountryCode = 'US';
                         

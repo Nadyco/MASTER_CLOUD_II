@@ -2,7 +2,7 @@
 @EndUserText.label: 'History - Entity Projection view'
 @Metadata.ignorePropagatedAnnotations: true
 define view entity ZC_INCT_H_NC
-  provider contract transactional_query 
+//  provider contract transactional_query
   as projection on ZI_INCT_H_NC
 {
     key HisUuid,
@@ -11,11 +11,17 @@ define view entity ZC_INCT_H_NC
     PreviousStatus,
     NewStatus,
     Text,
+    @Semantics.user.createdBy: true
     LocalCreatedBy,
+    @Semantics.systemDateTime.createdAt: true
     LocalCreatedAt,
+    @Semantics.user.localInstanceLastChangedBy: true
     LocalLastChangedBy,
+    @Semantics.systemDateTime.localInstanceLastChangedAt: true
     LocalLastChangedAt,
+    @Semantics.systemDateTime.lastChangedAt: true
     LastChangedAt,
     /* Associations */
-    _incident
+    // Redirigimos la asociación al padre para que apunte a la PROJECTION del padre, no a la interface
+    _incident : redirected to parent ZC_INCT_NC
 }
