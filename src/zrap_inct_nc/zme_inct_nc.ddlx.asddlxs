@@ -12,49 +12,47 @@
 }
 annotate entity ZC_INCT_NC with
 {
-  @UI.lineItem: [{
-      position: 10,
-      importance:#HIGH,
-      emphasized: true
-  }]
+  @UI.lineItem: [{ position: 10, importance:#HIGH, emphasized: true }]
+  @UI.selectionField: [{ position: 10 }]
   IncidentId;
 
-  @UI.lineItem: [{
-    position: 20,
-    importance:#HIGH,
-    emphasized: true
-  }]
+  @UI.lineItem: [{ position: 20, importance:#HIGH, emphasized: true }]
   Title;
 
-  @UI.lineItem: [{
-  position: 30,
-  importance:#HIGH,
-  emphasized: true
-  }]
+  @UI.lineItem: [{ position: 30, importance:#HIGH, emphasized: true }]
+  @UI.selectionField: [{ position: 30 }]
   Description;
 
-  @UI.lineItem: [{
-    position: 40,
-    importance:#HIGH,
-    emphasized: true
-  }]
+  @UI.lineItem: [{ position: 40, importance:#HIGH, emphasized: true }]
   //filtros
   @UI.selectionField: [{ position: 40 }]
+  @UI.textArrangement: #TEXT_FIRST
   @Consumption.valueHelpDefinition: [{ entity: { name: 'ZI_STATUS_VH_NC',
                                                  element: 'StatusCode'
                                                 },
 
                                         useForValidation: true
+                                   }]
 
-
-                                    }]
-  @UI.textArrangement: #TEXT_FIRST
   Status;
 
+  @UI.lineItem: [{ position: 50, importance:#HIGH, emphasized: true }]
+  @UI.selectionField: [{ position: 50 }]
+  @Consumption.valueHelpDefinition: [{ entity: { name: 'ZI_PRIORITY_VH_NC',
+                                                 element: 'PriorityCode'
+                                                },
 
-  //Priority;
-  //CreatedDate;
-  //ChangedDate;
+                                        useForValidation: true
+                                   }]
+  Priority;
+  
+  @UI.lineItem: [{ position: 60, importance:#HIGH, emphasized: true }]
+  @UI.selectionField: [{ position: 60 }]
+  CreatedDate;
+  @UI.lineItem: [{ position: 70, importance:#HIGH, emphasized: true }]
+  @UI.selectionField: [{ position: 70 }]
+  ChangedDate;
+  
   //LocalCreatedBy;
   //LocalCreatedAt;
   //LocalLastChangedBy;

@@ -1,40 +1,72 @@
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Incident -  proyección Entity'
 @Metadata.ignorePropagatedAnnotations: true
-//@Search.searchable: true
+@Search.searchable: true
 @Metadata.allowExtensions: true
 define root view entity ZC_INCT_NC
   provider contract transactional_query
   as projection on ZI_INCT_NC
-{
+{      
+      @Search.ranking: #HIGH
   key IncUuid,
-      IncidentId,
-      Title,
-      Description,
-      
+  
       @Search.ranking: #HIGH
       @Search.fuzzinessThreshold: 0.8
       @Search.defaultSearchElement: true    
+      IncidentId,
       
-      @ObjectModel.text.element: ['StatusText']
+      @Search.ranking: #HIGH
+      @Search.fuzzinessThreshold: 0.8
+      @Search.defaultSearchElement: true   
+      Title,
+      
+      @Search.ranking: #HIGH
+      @Search.fuzzinessThreshold: 0.8
+      @Search.defaultSearchElement: true  
+      Description,
+      
+          
+      @ObjectModel.text.element: [ 'StatusText' ]
       Status,
-      @Semantics.text: true
       _Status.StatusText as StatusText,
       
       Priority,
+      
+      @Search.ranking: #HIGH
+      @Search.fuzzinessThreshold: 0.8
+      @Search.defaultSearchElement: true  
+      @EndUserText.label: 'Create Date'
       CreatedDate,
+      
+      @Search.ranking: #HIGH
+      @Search.fuzzinessThreshold: 0.8
+      @Search.defaultSearchElement: true  
+      @EndUserText.label: 'Crange Date'
       ChangedDate,
+      
+      
+      @Search.ranking: #HIGH
       @Semantics.user.createdBy: true
       LocalCreatedBy,
+      
+      @Search.ranking: #HIGH
       @Semantics.systemDateTime.createdAt: true
       LocalCreatedAt,
+      
+      @Search.ranking: #HIGH
       @Semantics.user.localInstanceLastChangedBy: true
       LocalLastChangedBy,
+      
+      @Search.ranking: #HIGH
       @Semantics.systemDateTime.localInstanceLastChangedAt: true
       LocalLastChangedAt,
+      
+      @Search.ranking: #HIGH
       @Semantics.systemDateTime.lastChangedAt: true
       LastChangedAt,
+      
+      
       /* Associations */
-      _Status,
-      _History : redirected to composition child ZC_INCT_H_NC
+      _History : redirected to composition child ZC_INCT_H_NC,
+      _Status
 }

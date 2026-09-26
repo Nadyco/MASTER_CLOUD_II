@@ -5,6 +5,7 @@
 define view entity ZI_STATUS_VH_NC 
 as select from zdt_status_nc
 {
+
     key status_code as StatusCode,
-    status_description as StatusText
+        status_description as StatusText
 }

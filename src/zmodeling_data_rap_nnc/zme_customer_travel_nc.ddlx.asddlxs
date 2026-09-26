@@ -13,6 +13,17 @@
 annotate entity Z_C_CUSTOMER_TRAVEL_NC with
 
 {
+
+ @UI.facet: [{
+
+     id: 'CustomerDetails',
+     purpose: #STANDARD,
+     position: 10,
+     label: 'Customer Details',
+     type: #IDENTIFICATION_REFERENCE 
+
+ }]
+ 
   @UI.lineItem: [{
       position: 10,
       importance:#HIGH,
@@ -30,6 +41,7 @@ annotate entity Z_C_CUSTOMER_TRAVEL_NC with
                                            element: 'CustomerID'
                                        },
                                        useForValidation: true    }]
+                                           @UI.identification: [{ position:10 }]
   CustomerId;
 
   @UI.lineItem: [{
@@ -38,6 +50,7 @@ annotate entity Z_C_CUSTOMER_TRAVEL_NC with
     label: 'Customer Name',
     emphasized: true
   }]
+  @UI.identification: [{ position:20 }]
   Lastname;
 
   @UI.lineItem: [{
@@ -46,6 +59,7 @@ annotate entity Z_C_CUSTOMER_TRAVEL_NC with
     label: 'Customer Country',
     emphasized: true
   }]
+    @UI.identification: [{ position:30 }]
   Countryname;
 
   @UI.lineItem: [{
@@ -53,5 +67,6 @@ annotate entity Z_C_CUSTOMER_TRAVEL_NC with
   importance:#HIGH,
   emphasized: true
   }]
+      @UI.identification: [{ position:40 }]
   Description;
 }
