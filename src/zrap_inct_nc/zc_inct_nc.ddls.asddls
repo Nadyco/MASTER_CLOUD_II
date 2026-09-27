@@ -6,67 +6,70 @@
 define root view entity ZC_INCT_NC
   provider contract transactional_query
   as projection on ZI_INCT_NC
-{      
+{
       @Search.ranking: #HIGH
   key IncUuid,
-  
-      @Search.ranking: #HIGH
+
+      @Search.ranking: #MEDIUM
       @Search.fuzzinessThreshold: 0.8
-      @Search.defaultSearchElement: true    
+      @Search.defaultSearchElement: true
       IncidentId,
-      
+
       @Search.ranking: #HIGH
       @Search.fuzzinessThreshold: 0.8
-      @Search.defaultSearchElement: true   
+      @Search.defaultSearchElement: true
       Title,
-      
+
       @Search.ranking: #HIGH
       @Search.fuzzinessThreshold: 0.8
-      @Search.defaultSearchElement: true  
+      @Search.defaultSearchElement: true
       Description,
-      
-          
+
+
       @ObjectModel.text.element: [ 'StatusText' ]
       Status,
-      _Status.StatusText as StatusText,
-      
+      _Status.StatusText     as StatusText,
+
+      @ObjectModel.text.element: [ 'PriorityText' ]
       Priority,
-      
+      _priority.PriorityText as PriorityText,
+
       @Search.ranking: #HIGH
       @Search.fuzzinessThreshold: 0.8
-      @Search.defaultSearchElement: true  
+      @Search.defaultSearchElement: true
       @EndUserText.label: 'Create Date'
       CreatedDate,
-      
+
       @Search.ranking: #HIGH
       @Search.fuzzinessThreshold: 0.8
-      @Search.defaultSearchElement: true  
+      @Search.defaultSearchElement: true
       @EndUserText.label: 'Crange Date'
       ChangedDate,
-      
-      
+
+
       @Search.ranking: #HIGH
       @Semantics.user.createdBy: true
       LocalCreatedBy,
-      
+
       @Search.ranking: #HIGH
       @Semantics.systemDateTime.createdAt: true
       LocalCreatedAt,
-      
+
       @Search.ranking: #HIGH
       @Semantics.user.localInstanceLastChangedBy: true
       LocalLastChangedBy,
-      
+
       @Search.ranking: #HIGH
       @Semantics.systemDateTime.localInstanceLastChangedAt: true
       LocalLastChangedAt,
-      
+
       @Search.ranking: #HIGH
       @Semantics.systemDateTime.lastChangedAt: true
       LastChangedAt,
-      
-      
+
+
       /* Associations */
       _History : redirected to composition child ZC_INCT_H_NC,
-      _Status
+      _Status,
+      _priority
 }

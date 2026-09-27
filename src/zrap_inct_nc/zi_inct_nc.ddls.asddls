@@ -2,18 +2,19 @@
 @EndUserText.label: 'Incident - Root Entity'
 @Metadata.ignorePropagatedAnnotations: true
 define root view entity ZI_INCT_NC
-  as select from zdt_inct_nc 
-   composition [0..*] of ZI_INCT_H_NC as _History
-   
-   association [1..1] to ZI_STATUS_VH_NC as _Status    on _Status.StatusCode = $projection.Status
-  
+  as select from zdt_inct_nc
+  composition [0..*] of ZI_INCT_H_NC      as _History
+
+  association [1..1] to ZI_STATUS_VH_NC   as _Status   on _Status.StatusCode = $projection.Status
+  association [1..1] to ZI_PRIORITY_VH_NC as _priority on _priority.PriorityCode = $projection.Priority
+
 {
   key inc_uuid                                             as IncUuid,
       incident_id                                          as IncidentId,
       title                                                as Title,
-      description                                          as Description,   
-      status                                               as Status, 
-      cast ( priority as zed_priority_nc preserving type ) as Priority,      
+      description                                          as Description,
+      status                                               as Status,
+      cast ( priority as zed_priority_nc preserving type ) as Priority,
       created_date                                         as CreatedDate,
       changed_date                                         as ChangedDate,
       @Semantics.user.createdBy: true
@@ -22,13 +23,16 @@ define root view entity ZI_INCT_NC
       local_created_at                                     as LocalCreatedAt,
       @Semantics.user.localInstanceLastChangedBy: true
       local_last_changed_by                                as LocalLastChangedBy,
-      
+
       //Local Etag
-      @Semantics.systemDateTime.localInstanceLastChangedAt: true   
+      @Semantics.systemDateTime.localInstanceLastChangedAt: true
       local_last_changed_at                                as LocalLastChangedAt,
       //Total ETAG
       @Semantics.systemDateTime.lastChangedAt: true
       last_changed_at                                      as LastChangedAt,
+      // Annotaciones
       _Status,
+      _priority,
+      
       _History // Make association public
 }
