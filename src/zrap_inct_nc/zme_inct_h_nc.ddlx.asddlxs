@@ -48,6 +48,6 @@ annotate entity ZC_INCT_H_NC with
   @UI.hidden: true
   LastChangedAt;
   /* Associations */
-  //    _incident;;
+//      _incident;
 
 }

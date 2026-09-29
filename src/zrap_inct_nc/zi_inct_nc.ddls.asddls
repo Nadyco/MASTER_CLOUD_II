@@ -22,14 +22,14 @@ define root view entity ZI_INCT_NC
       @Semantics.systemDateTime.createdAt: true
       local_created_at                                     as LocalCreatedAt,
       @Semantics.user.localInstanceLastChangedBy: true
-      local_last_changed_by                                as LocalLastChangedBy,
+      local_last_changed_by                                as locallastchangedby,
 
       //Local Etag
       @Semantics.systemDateTime.localInstanceLastChangedAt: true
-      local_last_changed_at                                as LocalLastChangedAt,
+      local_last_changed_at                                as locallastchangedat,
       //Total ETAG
       @Semantics.systemDateTime.lastChangedAt: true
-      last_changed_at                                      as LastChangedAt,
+      last_changed_at                                      as lastchangedat,
       // Annotaciones
       _Status,
       _priority,

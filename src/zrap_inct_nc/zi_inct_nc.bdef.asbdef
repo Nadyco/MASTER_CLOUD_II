@@ -1,0 +1,148 @@
+managed implementation in class zbp_i_inct_nc unique;
+strict ( 2 );
+with draft;
+
+define behavior for ZI_INCT_NC alias Incidents
+persistent table zdt_inct_nc
+draft table zdt_inct_nc_d
+
+lock master total etag lastchangedat
+etag master LocalLastChangedAt
+
+authorization master ( global, instance )
+{
+  create;
+  update;
+  delete;
+
+  //campo autoincremental
+  field ( numbering : managed, readonly ) IncUuid;
+
+  //campos solo de lectura
+  field ( readonly )
+  IncidentId,
+  Status,
+  ChangedDate,
+  CreatedDate,
+  LastChangedAt,
+  LocalCreatedAt,
+  LocalCreatedBy,
+  LocalLastChangedAt,
+  LocalLastChangedBy;
+
+
+  // Campos obligatorios
+  field ( mandatory )
+  Title,
+  Description,
+  Priority;
+
+  association _History { create; with draft; }
+
+
+//********* Accions ********************//
+
+  //Botones actions
+  action ( features : instance, authorization : update )
+  ChangeStatus parameter ZAE_CHANGE_STATUS_NC result [1] $self;
+
+  side effects
+  {
+    action ChangeStatus affects field Status,
+        field ChangedDate,
+        entity _History;
+  }
+
+//********* VALICACIONES ********************//
+
+  // valida el el cambio de status
+  validation ValidateStatus on save { create; update; field Status; }
+  // valida fecha futura
+  validation ValidateFuturedate on save { create; update; field ChangedDate, CreatedDate; }
+
+//********* Determinaciones  ********************//
+
+  // al abrir la vista de creación de registros, los campos incident_id, creation_date
+  // y status aparezcan llenos automáticamente
+  determination SetInitIncident on modify { create; }
+
+  // crear un nuevo incidente, se cree un registro nuevo en
+  // la vista de historial
+  determination Createfirstinsident on save { create; }
+
+
+  // Draft actions
+  draft action Resume;
+  draft action Edit;
+  draft action Activate optimized;
+  draft action Discard;
+
+  // Explicit definition required in strict mode
+  draft determine action Prepare
+  {
+    validation ValidateStatus;
+    validation ValidateFuturedate;
+  }
+
+//********* Mapping Incident ********************//
+  mapping for zdt_inct_nc
+    {
+      IncUuid            = inc_uuid;
+      IncidentId         = incident_id;
+      Title              = title;
+      Description        = description;
+      Status             = status;
+      Priority           = priority;
+      CreatedDate        = created_date;
+      ChangedDate        = changed_date;
+      LocalCreatedBy     = local_created_by;
+      LocalCreatedAt     = local_created_at;
+      locallastchangedby = local_last_changed_by;
+      locallastchangedat = local_last_changed_at;
+      lastchangedat      = last_changed_at;
+    }
+
+}
+
+define behavior for ZI_INCT_H_NC alias History
+persistent table zdt_inct_h_nc
+draft table zdt_inct_h_nc_d
+
+lock dependent by _incident
+authorization dependent by _incident
+{
+  update;
+  delete;
+
+  //campo autoincremental
+  field ( numbering : managed, readonly ) HisUuid;
+
+  // campos solo lectura
+  field ( readonly )
+  IncUuid,
+  LastChangedAt,
+  LocalCreatedAt,
+  LocalCreatedBy,
+  LocalLastChangedAt,
+  LocalLastChangedBy;
+
+
+
+  association _incident { with draft; }
+
+//********* Mapping history ********************//
+  mapping for zdt_inct_h_nc
+    {
+      HisUuid            = his_uuid;
+      IncUuid            = inc_uuid;
+      HisId              = his_id;
+      PreviousStatus     = previous_status;
+      NewStatus          = new_status;
+      Text               = text;
+      LocalCreatedBy     = local_created_by;
+      LocalCreatedAt     = local_created_at;
+      LocalLastChangedBy = local_last_changed_by;
+      LocalLastChangedAt = local_last_changed_at;
+      LastChangedAt      = last_changed_at;
+    }
+}

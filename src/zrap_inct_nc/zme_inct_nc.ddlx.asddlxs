@@ -69,8 +69,8 @@ annotate entity ZC_INCT_NC with
   @UI.lineItem: [{ position: 60, importance:#HIGH, emphasized: true }]
   @UI.selectionField: [{ position: 60 }]
   @UI.identification: [{ position:60 }]
-
   CreatedDate;
+  
   @UI.lineItem: [{ position: 70, importance:#HIGH, emphasized: true }]
   @UI.identification: [{ position:70 }]
   @UI.selectionField: [{ position: 70 }]

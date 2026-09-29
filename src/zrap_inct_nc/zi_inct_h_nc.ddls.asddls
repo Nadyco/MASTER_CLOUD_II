@@ -10,7 +10,7 @@ define view entity ZI_INCT_H_NC
   key inc_uuid              as IncUuid,
       his_id                as HisId,
       previous_status       as PreviousStatus,
-      new_status           as NewStatus,
+      new_status            as NewStatus,
       text                  as Text,
       @Semantics.user.createdBy: true
       local_created_by      as LocalCreatedBy,

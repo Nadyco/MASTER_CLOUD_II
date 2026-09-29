@@ -25,11 +25,16 @@ define root view entity ZC_INCT_NC
       @Search.defaultSearchElement: true
       Description,
 
-
+      @Search.defaultSearchElement: true
+      @Search.ranking: #MEDIUM
+      @Search.fuzzinessThreshold: 0.8
       @ObjectModel.text.element: [ 'StatusText' ]
       Status,
       _Status.StatusText     as StatusText,
 
+      @Search.defaultSearchElement: true
+      @Search.ranking: #MEDIUM
+      @Search.fuzzinessThreshold: 0.8
       @ObjectModel.text.element: [ 'PriorityText' ]
       Priority,
       _priority.PriorityText as PriorityText,
