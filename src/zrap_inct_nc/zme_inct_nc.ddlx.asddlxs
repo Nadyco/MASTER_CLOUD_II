@@ -32,7 +32,8 @@ annotate entity ZC_INCT_NC with
           position: 20,
           label: 'History',
           type: #LINEITEM_REFERENCE,
-          targetElement: '_History' }]
+          targetElement: '_History' }
+          ]
 
   @UI.lineItem: [{type: #FOR_ACTION, dataAction: 'ChangeStatus', label : 'Change Status', position: 10  }]
   IncUuid;
