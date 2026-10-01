@@ -48,7 +48,7 @@ define root view entity ZC_INCT_NC
       @Search.ranking: #HIGH
       @Search.fuzzinessThreshold: 0.8
       @Search.defaultSearchElement: true
-      @EndUserText.label: 'Crange Date'
+      @EndUserText.label: 'Change Date'
       ChangedDate,
 
 
@@ -62,15 +62,15 @@ define root view entity ZC_INCT_NC
 
       @Search.ranking: #HIGH
       @Semantics.user.localInstanceLastChangedBy: true
-      LocalLastChangedBy,
+      locallastchangedby,
 
       @Search.ranking: #HIGH
       @Semantics.systemDateTime.localInstanceLastChangedAt: true
-      LocalLastChangedAt,
+      locallastchangedat,
 
       @Search.ranking: #HIGH
       @Semantics.systemDateTime.lastChangedAt: true
-      LastChangedAt,
+      lastchangedat,
 
 
       /* Associations */

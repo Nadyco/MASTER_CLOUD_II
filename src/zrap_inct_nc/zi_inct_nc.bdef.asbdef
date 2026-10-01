@@ -23,7 +23,6 @@ authorization master ( global, instance )
   IncidentId,
   Status,
   ChangedDate,
-  CreatedDate,
   LastChangedAt,
   LocalCreatedAt,
   LocalCreatedBy,
@@ -68,7 +67,7 @@ authorization master ( global, instance )
 
   // crear un nuevo incidente, se cree un registro nuevo en
   // la vista de historial
-  determination Createfirstinsident on save { create; }
+  determination Createfirstincident on save { create; }
 
 
   // Draft actions
@@ -107,10 +106,11 @@ authorization master ( global, instance )
 define behavior for ZI_INCT_H_NC alias History
 persistent table zdt_inct_h_nc
 draft table zdt_inct_h_nc_d
-
+etag master LocalLastChangedAt
 lock dependent by _incident
 authorization dependent by _incident
 {
+
   update;
   delete;
 
