@@ -32,7 +32,6 @@ define root view entity ZI_INCT_NC
       last_changed_at                                      as lastchangedat,
       // Annotaciones
       _Status,
-      _priority,
-      
+      _priority,     
       _History // Make association public
 }

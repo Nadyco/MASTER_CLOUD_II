@@ -15,43 +15,55 @@
 annotate entity ZC_INCT_H_NC with
 {
   @UI.hidden: true
+  @UI.lineItem: [{ position: 10 }]
   HisUuid;
+
   @UI.hidden: true
+  @UI.lineItem: [{ position: 20 }]
   IncUuid;
 
   @UI.facet: [{
 
      id: 'HistoryDetails',
      purpose: #STANDARD,
-     position: 10,
+     position: 30,
      label: 'History Details',
      type: #IDENTIFICATION_REFERENCE
   }]
-  
-  @UI.lineItem: [{ position: 10, importance:#HIGH, emphasized: true }]
-  @UI.identification: [{ position:10 }]
-  HisId;
-  @UI.lineItem: [{ position: 20, importance:#LOW, emphasized: true }]
-  @UI.identification: [{ position:20 }]
-  PreviousStatus;
-  @UI.lineItem: [{ position: 30, importance:#LOW, emphasized: true }]
+
+  @UI.lineItem: [{ position: 30, importance:#HIGH, emphasized: true }]
   @UI.identification: [{ position:30 }]
-  NewStatus;
+  HisId;
+  
   @UI.lineItem: [{ position: 40, importance:#LOW, emphasized: true }]
   @UI.identification: [{ position:40 }]
+  PreviousStatus;
+  
+  @UI.lineItem: [{ position: 50, importance:#LOW, emphasized: true }]
+  @UI.identification: [{ position:50 }]
+  NewStatus;
+  
+  @UI.lineItem: [{ position: 60, importance:#LOW, emphasized: true }]
+  @UI.identification: [{ position:60 }]
   Text;
 
   @UI.hidden: true
   LocalCreatedBy;
+  
   @UI.hidden: true
   LocalCreatedAt;
+  
   @UI.hidden: true
   LocalLastChangedBy;
+  
   @UI.hidden: true
   LocalLastChangedAt;
+  
   @UI.hidden: true
   LastChangedAt;
+  
   /* Associations */
-  //      _incident;
+  @UI.hidden: true
+  _incident;
 
 }

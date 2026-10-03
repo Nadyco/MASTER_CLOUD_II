@@ -39,7 +39,7 @@ authorization master ( global, instance )
   association _History { create; with draft; }
 
 
-//********* Accions ********************//
+  //********* Accions ********************//
 
   //Botones actions
   action ( features : instance, authorization : update )
@@ -52,14 +52,19 @@ authorization master ( global, instance )
         entity _History;
   }
 
-//********* VALICACIONES ********************//
+  //********* VALICACIONES ********************//
 
-  // valida el el cambio de status
-  validation ValidateStatus on save { create; update; field Status; }
+  // Valida el campo priority
+  validation ValidatePriority on save { create; update; field priority; }
+
+  //Valida valores iniciales title,description,
+  validation validateemptyfields on save { create; update; field Title, Description;}
+
+
   // valida fecha futura
   validation ValidateFuturedate on save { create; update; field ChangedDate, CreatedDate; }
 
-//********* Determinaciones  ********************//
+  //********* Determinaciones  ********************//
 
   // al abrir la vista de creación de registros, los campos incident_id, creation_date
   // y status aparezcan llenos automáticamente
@@ -79,11 +84,12 @@ authorization master ( global, instance )
   // Explicit definition required in strict mode
   draft determine action Prepare
   {
-    validation ValidateStatus;
+    validation ValidatePriority;
+    validation validateemptyfields;
     validation ValidateFuturedate;
   }
 
-//********* Mapping Incident ********************//
+  //********* Mapping Incident ********************//
   mapping for zdt_inct_nc
     {
       IncUuid            = inc_uuid;
@@ -130,7 +136,7 @@ authorization dependent by _incident
 
   association _incident { with draft; }
 
-//********* Mapping history ********************//
+  //********* Mapping history ********************//
   mapping for zdt_inct_h_nc
     {
       HisUuid            = his_uuid;

@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_MSAG" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <T100A>
+    <ARBGB>ZRAP_MSG_NC</ARBGB>
+    <MASTERLANG>E</MASTERLANG>
+    <STEXT>Msg RAP</STEXT>
+   </T100A>
+   <T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZRAP_MSG_NC</ARBGB>
+     <MSGNR>001</MSGNR>
+     <TEXT>Title: es un campo obligatorio</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZRAP_MSG_NC</ARBGB>
+     <MSGNR>002</MSGNR>
+     <TEXT>Description: es un campo obligatorio</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZRAP_MSG_NC</ARBGB>
+     <MSGNR>003</MSGNR>
+     <TEXT>Priority: Es un campo obligatorio</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZRAP_MSG_NC</ARBGB>
+     <MSGNR>004</MSGNR>
+     <TEXT>Created Date : Es un campo obligatorio</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZRAP_MSG_NC</ARBGB>
+     <MSGNR>005</MSGNR>
+     <TEXT>Created Date no debe ser mayor a &amp;1</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZRAP_MSG_NC</ARBGB>
+     <MSGNR>006</MSGNR>
+     <TEXT>ChangedDate debe ser superior a CreatedDate</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZRAP_MSG_NC</ARBGB>
+     <MSGNR>007</MSGNR>
+     <TEXT>Status: Es un campo Obligatorio</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZRAP_MSG_NC</ARBGB>
+     <MSGNR>008</MSGNR>
+     <TEXT>No se puede cambiar Status PE a CO,CL o CN</TEXT>
+    </T100>
+   </T100>
+  </asx:values>
+ </asx:abap>
+</abapGit>

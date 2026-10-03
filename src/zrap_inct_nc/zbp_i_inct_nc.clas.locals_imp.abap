@@ -31,8 +31,10 @@ CLASS lhc_Incidents DEFINITION INHERITING FROM cl_abap_behavior_handler.
     METHODS ValidateFuturedate FOR VALIDATE ON SAVE
        keys FOR Incidents~ValidateFuturedate.
 
-    METHODS ValidateStatus FOR VALIDATE ON SAVE
-       keys FOR Incidents~ValidateStatus.
+    METHODS ValidatePriority FOR VALIDATE ON SAVE
+       keys FOR Incidents~ValidatePriority.
+    METHODS validateemptyfields FOR VALIDATE ON SAVE
+       keys FOR Incidents~validateemptyfields.
 
 ENDCLASS.
 
@@ -49,23 +51,44 @@ CLASS lhc_Incidents IMPLEMENTATION.
      FAILED failed.
 
 
+    DATA(lv_inc_uuid) = keys[ 1 ]-IncUuid.
+**  lv_count tendra la cantidad de registros de historial para el incidente
+    SELECT FROM zdt_inct_h_nc
+      FIELDS COUNT( his_id )
+      WHERE inc_uuid = @lv_inc_uuid
+      INTO @DATA(lv_count).
+
     result = VALUE #( FOR incident  IN Incidents
                           ( %tky = incident-%tky
-                          "Cuando el estado es completo, closed o canceled se dehabilita el boton
+                          "Cuando el estado es completo, closed o canceled se dehabilita el boton y no tiene
+                          "Historial creado es decir primer registro
                            %action-ChangeStatus = COND #( WHEN incident-Status = lc_status-canceled OR
                                                                incident-Status = lc_status-closed OR
-                                                               incident-Status = lc_status-completed
-                                                          THEN if_abap_behv=>fc-o-disabled
-                                                          ELSE if_abap_behv=>fc-o-enabled )
+                                                               incident-Status = lc_status-completed OR
+                                                               lv_count IS INITIAL
+                                                                THEN if_abap_behv=>fc-o-disabled
+                                                                ELSE if_abap_behv=>fc-o-enabled )
 
 
-                      ) ).
+
+
+                     ) ).
 
 
 
   ENDMETHOD.
 
   METHOD get_instance_authorizations.
+**  leo los datos de los registros
+       READ ENTITIES OF zi_inct_nc IN LOCAL MODE
+       ENTITY Incidents
+       FIELDS ( IncidentId Status )
+       WITH CORRESPONDING #( keys )
+       RESULT DATA(incidents).
+
+
+
+
   ENDMETHOD.
 
   METHOD get_global_authorizations.
@@ -76,7 +99,6 @@ CLASS lhc_Incidents IMPLEMENTATION.
     DATA: lt_new_history  TYPE TABLE FOR CREATE zi_inct_nc\_History.
     DATA: lt_upd_inc      TYPE TABLE FOR UPDATE zi_inct_nc.
 
-
 **  leo los datos de los registros
     READ ENTITIES OF zi_inct_nc IN LOCAL MODE
      ENTITY Incidents
@@ -86,16 +108,57 @@ CLASS lhc_Incidents IMPLEMENTATION.
 
 ** Recorro los datos
     LOOP AT lt_incidents ASSIGNING FIELD-SYMBOL(<lfs_incident>).
-*
+
+      DATA(lv_error) = abap_false.
+
 **   tengo la estructura key con el %param para la clave actual
       DATA(ls_key) = keys[ KEY id  %tky = <lfs_incident>-%tky ].
 
 **   Valido los estados
 **   - Si esta en estado PE, no se puede pasar a CO(Completed), CL -(Closed) , CN()Cancel
+      IF ls_key-%param-New_Status IS INITIAL.
+        "el cambio de estado no puede estar vacio
+        APPEND VALUE #( %tky = <lfs_incident>-%tky ) TO failed-incidents.
+
+        APPEND VALUE #( %tky = <lfs_incident>-%tky
+                        %state_area = 'VALIDATE_INCIDENT'
+                        %msg = NEW zcl_msg_rap_nc( textid   = zcl_msg_rap_nc=>empty_status
+                                                   severity = if_abap_behv_message=>severity-error
+                                                 )
+
+                        %op-%action-changestatus = if_abap_behv=>mk-on
+                ) TO reported-incidents.
+
+        lv_error = abap_true.
+        CONTINUE.
+
+      ELSEIF <lfs_incident>-Status = lc_status-pending.
+
+        IF ls_key-%param-New_Status = lc_status-canceled OR
+           ls_key-%param-New_Status = lc_status-completed OR
+           ls_key-%param-New_Status = lc_status-closed.
+
+          APPEND VALUE #( %tky = <lfs_incident>-%tky ) TO failed-incidents.
+
+          APPEND VALUE #( %tky = <lfs_incident>-%tky
+                          %state_area = 'VALIDATE_INCIDENT'
+                          %msg = NEW zcl_msg_rap_nc( textid   = zcl_msg_rap_nc=>error_status
+                                                     severity = if_abap_behv_message=>severity-error )
+
+                          %op-%action-changestatus = if_abap_behv=>mk-on
+                         ) TO reported-incidents.
+
+
+          lv_error = abap_true.
+*         pasar al proximo registro si lo hubiera
+          CONTINUE.
+        ENDIF.
 **   - si esta en CO,CL o CN, no se puede cambiar a ningun estado mas
+        "esto no se da nunca porque se deshabilito el boton changestatus en esos estados
+      ENDIF.
 
 
-
+      CHECK lv_error = abap_false.
 
 *     " Agrego a la tabla el incidente a actualizar
       APPEND VALUE #(  %tky = <lfs_incident>-%tky
@@ -126,6 +189,8 @@ CLASS lhc_Incidents IMPLEMENTATION.
 
     ENDLOOP.
 
+    CHECK NOT lt_upd_inc[] IS INITIAL.
+
 **  Modifico los registros de incidentes
     MODIFY ENTITIES OF zi_inct_nc IN LOCAL MODE
     ENTITY Incidents
@@ -149,8 +214,9 @@ CLASS lhc_Incidents IMPLEMENTATION.
     ENTITY Incidents
     ALL FIELDS
     WITH CORRESPONDING #( keys )
-    RESULT DATA(Incidents).
-*
+    RESULT DATA(Incidents)
+    FAILED failed.
+
 
     " Devolver el self (necesario por contrato de la acción)
     result = VALUE #( FOR incident IN Incidents ( %tky   = Incident-%tky
@@ -176,12 +242,13 @@ CLASS lhc_Incidents IMPLEMENTATION.
 
     MODIFY ENTITIES OF zi_inct_nc IN LOCAL MODE
      ENTITY Incidents
-       UPDATE FIELDS ( IncidentId Status CreatedDate )
+       UPDATE FIELDS ( IncidentId Status CreatedDate ChangedDate )
        WITH VALUE #( FOR key IN keys
                       ( %tky         = key-%tky
                         IncidentId   = lv_new_id
                         Status       = lc_status-open
                         CreatedDate  = cl_abap_context_info=>get_system_date( )
+                        ChangedDate  = cl_abap_context_info=>get_system_date( )
                          ) )
      REPORTED DATA(ls_reported).
 
@@ -231,10 +298,144 @@ CLASS lhc_Incidents IMPLEMENTATION.
 
   ENDMETHOD.
 
+
+
   METHOD ValidateFuturedate.
+
+**  leo los datos de los registros
+    READ ENTITIES OF zi_inct_nc IN LOCAL MODE
+     ENTITY Incidents
+      FIELDS ( CreatedDate ChangedDate )
+      WITH CORRESPONDING #( keys )
+     RESULT DATA(data).
+*
+** Recorro los datos
+    LOOP AT data INTO DATA(incident).
+
+      IF incident-CreatedDate IS INITIAL.
+*      si la fecha de creacion esta vacia
+        APPEND VALUE #( %tky = incident-%tky ) TO failed-incidents.
+        APPEND VALUE #( %tky = incident-%tky
+                        %state_area = 'VALIDATE_INCIDENT'
+                        %msg = NEW zcl_msg_rap_nc( textid   = zcl_msg_rap_nc=>empty_creation_date
+                                                  severity = if_abap_behv_message=>severity-error )
+                        %element-CreatedDate = if_abap_behv=>mk-on
+
+                       ) TO reported-incidents.
+
+      ELSEIF incident-CreatedDate GT cl_abap_context_info=>get_system_date( ).
+        " si a fecha de creacion es mayor que la fecha del dia
+
+        APPEND VALUE #( %tky = incident-%tky ) TO failed-incidents.
+
+        APPEND VALUE #( %tky = incident-%tky
+                        %state_area = 'VALIDATE_INCIDENT'
+                        %msg = NEW zcl_msg_rap_nc( textid   = zcl_msg_rap_nc=>future_date
+                                                   lv_datum = cl_abap_context_info=>get_system_date( )
+                                                   severity = if_abap_behv_message=>severity-error
+                                                 )
+                         %element-CreatedDate = if_abap_behv=>mk-on
+
+                        ) TO reported-incidents.
+
+      ELSEIF incident-ChangedDate LT incident-CreatedDate.
+        "la fecha de cambio debe ser mayor o igual a la fecha de creacion
+        APPEND VALUE #( %tky = incident-%tky ) TO failed-incidents.
+
+        APPEND VALUE #( %tky = incident-%tky
+                        %state_area = 'VALIDATE_INCIDENT'
+                        %msg = NEW zcl_msg_rap_nc( textid   = zcl_msg_rap_nc=>error_changedate
+                                                   severity = if_abap_behv_message=>severity-error )
+                         %element-CreatedDate = if_abap_behv=>mk-on
+
+                        ) TO reported-incidents.
+
+      ENDIF.
+    ENDLOOP.
+
   ENDMETHOD.
 
-  METHOD ValidateStatus.
+
+  METHOD ValidatePriority.
+
+***  leo los datos de los registros
+    READ ENTITIES OF zi_inct_nc IN LOCAL MODE
+    ENTITY Incidents
+    FIELDS (  Priority )
+    WITH CORRESPONDING #( keys )
+    RESULT DATA(incidents).
+
+**  recupero los valores validos de prioridades
+*    SELECT FROM zdt_priority_nc
+*      FIELDS *
+*      INTO TABLE @DATA(lt_priority).
+
+    LOOP AT incidents INTO DATA(incident).
+
+      IF incident-Priority IS INITIAL.
+        " si el campo esta vacio
+        APPEND VALUE #( %tky = incident-%tky ) TO failed-incidents.
+*      ELSEIF NOT incident-Priority IS INITIAL  AND
+*         NOT  line_exists( lt_priority[ priority_code = incident-Priority ]  ).
+*        " Si el campo tiene dato pero no es una prioridad valida
+*
+*        APPEND VALUE #( %tky = incident-%tky ) TO failed-incidents.
+
+        APPEND VALUE #( %tky = incident-%tky
+                        %state_area = 'VALIDATE_INCIDENT'
+                        %msg = NEW zcl_msg_rap_nc( textid   = zcl_msg_rap_nc=>empty_Priority
+                                                   severity = if_abap_behv_message=>severity-error )
+                        %element-priority = if_abap_behv=>mk-on
+                      ) TO reported-incidents.
+
+      ENDIF.
+    ENDLOOP.
+
+
+  ENDMETHOD.
+
+
+  METHOD validateemptyfields.
+
+***  leo los datos de los registros
+    READ ENTITIES OF zi_inct_nc IN LOCAL MODE
+    ENTITY Incidents
+    ALL FIELDS
+    WITH CORRESPONDING #( keys )
+    RESULT DATA(incidents).
+
+
+    LOOP AT incidents INTO DATA(incident).
+
+      IF incident-Title IS INITIAL .
+        "si el campo title esta vacio
+        APPEND VALUE #( %tky = incident-%tky ) TO failed-incidents.
+
+        APPEND VALUE #( %tky = incident-%tky
+                        %state_area = 'VALIDATE_INCIDENT'
+                        %msg = NEW zcl_msg_rap_nc( textid   = zcl_msg_rap_nc=>empty_title
+                                                   severity = if_abap_behv_message=>severity-error )
+                         %element-title = if_abap_behv=>mk-on
+
+                        ) TO reported-incidents.
+      ENDIF.
+
+      IF incident-Description IS INITIAL.
+
+        " si el campo descripcion esta vacio
+        APPEND VALUE #( %tky = incident-%tky ) TO failed-incidents.
+
+        APPEND VALUE #(  %tky = incident-%tky
+                         %state_area = 'VALIDATE_INCIDENT'
+                         %msg = NEW zcl_msg_rap_nc( textid   = zcl_msg_rap_nc=>empty_Desc
+                                                    severity = if_abap_behv_message=>severity-error )
+
+                         %element-Description = if_abap_behv=>mk-on
+
+                       ) TO reported-incidents.
+      ENDIF.
+    ENDLOOP.
+
   ENDMETHOD.
 
 ENDCLASS.
