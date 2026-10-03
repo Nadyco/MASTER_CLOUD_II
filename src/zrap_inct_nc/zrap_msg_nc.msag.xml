@@ -56,6 +56,18 @@
      <MSGNR>008</MSGNR>
      <TEXT>No se puede cambiar Status PE a CO,CL o CN</TEXT>
     </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZRAP_MSG_NC</ARBGB>
+     <MSGNR>009</MSGNR>
+     <TEXT>Al Asignar Status In Progress(IP) debe asignar un Responsable</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZRAP_MSG_NC</ARBGB>
+     <MSGNR>010</MSGNR>
+     <TEXT>Solo el administrador (&amp;1) puede cambiar status a In Progress(IP)</TEXT>
+    </T100>
    </T100>
   </asx:values>
  </asx:abap>

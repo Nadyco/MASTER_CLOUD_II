@@ -11,5 +11,7 @@ define abstract entity ZAE_CHANGE_STATUS_NC
   new_status  : zed_status_nc;
   @EndUserText.label: 'Description'
   description : abap.char(80);
+  @EndUserText.label: 'Responsable'
+  Responsable: zed_responsable_nc;
 
 }

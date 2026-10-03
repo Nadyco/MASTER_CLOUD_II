@@ -65,7 +65,7 @@ CLASS zcl_msg_rap_nc DEFINITION
         attr4 TYPE scx_attrname VALUE '',
       END OF error_changedate,
 
-       BEGIN OF empty_status,
+      BEGIN OF empty_status,
         msgid TYPE symsgid VALUE 'ZRAP_MSG_NC',
         msgno TYPE symsgno VALUE '007',
         attr1 TYPE scx_attrname VALUE '',
@@ -81,29 +81,45 @@ CLASS zcl_msg_rap_nc DEFINITION
         attr2 TYPE scx_attrname VALUE '',
         attr3 TYPE scx_attrname VALUE '',
         attr4 TYPE scx_attrname VALUE '',
-      END OF error_status.
+      END OF error_status,
 
+      BEGIN OF empty_Responsable,
+        msgid TYPE symsgid VALUE 'ZRAP_MSG_NC',
+        msgno TYPE symsgno VALUE '009',
+        attr1 TYPE scx_attrname VALUE '',
+        attr2 TYPE scx_attrname VALUE '',
+        attr3 TYPE scx_attrname VALUE '',
+        attr4 TYPE scx_attrname VALUE '',
+      END OF empty_Responsable,
 
-
-
+      BEGIN OF error_Responsable,
+        msgid TYPE symsgid VALUE 'ZRAP_MSG_NC',
+        msgno TYPE symsgno VALUE '010',
+        attr1 TYPE scx_attrname VALUE 'Responsable',
+        attr2 TYPE scx_attrname VALUE '',
+        attr3 TYPE scx_attrname VALUE '',
+        attr4 TYPE scx_attrname VALUE '',
+      END OF error_Responsable.
 
     METHODS constructor
       IMPORTING
-        textid   LIKE if_t100_message=>t100key OPTIONAL
-        previous LIKE previous OPTIONAL
-        attr1    TYPE string OPTIONAL
-        attr2    TYPE string OPTIONAL
-        attr3    TYPE string OPTIONAL
-        attr4    TYPE string OPTIONAL
-        lv_datum TYPE datum OPTIONAL
-        severity TYPE if_abap_behv_message=>t_severity .
+        textid      LIKE if_t100_message=>t100key OPTIONAL
+        previous    LIKE previous OPTIONAL
+        attr1       TYPE string OPTIONAL
+        attr2       TYPE string OPTIONAL
+        attr3       TYPE string OPTIONAL
+        attr4       TYPE string OPTIONAL
+        lv_datum    TYPE datum OPTIONAL
+        Responsable TYPE zed_responsable_nc OPTIONAL
+        severity    TYPE if_abap_behv_message=>t_severity .
 
 
-    DATA: attr1    TYPE string,
-          attr2    TYPE string,
-          attr3    TYPE string,
-          attr4    TYPE string,
-          lv_datum TYPE datum.
+    DATA: attr1       TYPE string,
+          attr2       TYPE string,
+          attr3       TYPE string,
+          attr4       TYPE string,
+          lv_datum    TYPE datum,
+          Responsable TYPE zed_responsable_nc.
 
   PROTECTED SECTION.
   PRIVATE SECTION.
@@ -123,6 +139,7 @@ CLASS zcl_msg_rap_nc IMPLEMENTATION.
     me->attr3 = attr3.
     me->attr4 = attr4.
     me->lv_datum = lv_datum.
+    me->Responsable = Responsable.
 
     if_abap_behv_message~m_severity = severity.
 

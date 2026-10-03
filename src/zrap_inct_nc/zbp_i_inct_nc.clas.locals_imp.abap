@@ -79,16 +79,6 @@ CLASS lhc_Incidents IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD get_instance_authorizations.
-**  leo los datos de los registros
-       READ ENTITIES OF zi_inct_nc IN LOCAL MODE
-       ENTITY Incidents
-       FIELDS ( IncidentId Status )
-       WITH CORRESPONDING #( keys )
-       RESULT DATA(incidents).
-
-
-
-
   ENDMETHOD.
 
   METHOD get_global_authorizations.
@@ -99,6 +89,11 @@ CLASS lhc_Incidents IMPLEMENTATION.
     DATA: lt_new_history  TYPE TABLE FOR CREATE zi_inct_nc\_History.
     DATA: lt_upd_inc      TYPE TABLE FOR UPDATE zi_inct_nc.
 
+    DATA(lv_current_user) = cl_abap_context_info=>get_user_technical_name( ).
+
+    "----------------------------------------------------------------
+    " 1. Leer datos actuales de los incidentes (Status)
+    "----------------------------------------------------------------
 **  leo los datos de los registros
     READ ENTITIES OF zi_inct_nc IN LOCAL MODE
      ENTITY Incidents
@@ -114,14 +109,18 @@ CLASS lhc_Incidents IMPLEMENTATION.
 **   tengo la estructura key con el %param para la clave actual
       DATA(ls_key) = keys[ KEY id  %tky = <lfs_incident>-%tky ].
 
+
 **   Valido los estados
-**   - Si esta en estado PE, no se puede pasar a CO(Completed), CL -(Closed) , CN()Cancel
+      "----------------------------------------------------------------
+      " 2. Si New_Status esta vacio da error y salgo
+      "----------------------------------------------------------------
       IF ls_key-%param-New_Status IS INITIAL.
+
         "el cambio de estado no puede estar vacio
         APPEND VALUE #( %tky = <lfs_incident>-%tky ) TO failed-incidents.
 
         APPEND VALUE #( %tky = <lfs_incident>-%tky
-                        %state_area = 'VALIDATE_INCIDENT'
+                        %state_area = 'VALIDATE_STATUS'
                         %msg = NEW zcl_msg_rap_nc( textid   = zcl_msg_rap_nc=>empty_status
                                                    severity = if_abap_behv_message=>severity-error
                                                  )
@@ -130,10 +129,54 @@ CLASS lhc_Incidents IMPLEMENTATION.
                 ) TO reported-incidents.
 
         lv_error = abap_true.
-        CONTINUE.
+        EXIT.
+
+      ELSEIF ls_key-%param-New_Status = lc_status-in_progress.
+        "----------------------------------------------------------------
+        " 3. Si ingreso status IP, valida que haya ingresado responsable
+        "----------------------------------------------------------------
+        IF ls_key-%param-Responsable IS INITIAL.
+          " Responsable es Obligatorio
+          APPEND VALUE #( %tky = <lfs_incident>-%tky ) TO failed-incidents.
+
+          APPEND VALUE #( %tky = <lfs_incident>-%tky
+                %state_area = 'VALIDATE_STATUS'
+                %msg = NEW zcl_msg_rap_nc( textid   = zcl_msg_rap_nc=>empty_Responsable
+                                           severity = if_abap_behv_message=>severity-error )
+
+                %op-%action-changestatus = if_abap_behv=>mk-on
+               ) TO reported-incidents.
+
+
+          lv_error = abap_true.
+
+          EXIT.
+        ELSEIF ls_key-%param-Responsable <> lv_current_user.
+          "----------------------------------------------------------------
+          " 4. Si Ingreso responsable y el status IP, valida que sea el
+          "    Administrador
+          "----------------------------------------------------------------
+          "solo el Administrador Tiene permiso de cambiar a este estado
+          APPEND VALUE #( %tky = <lfs_incident>-%tky ) TO failed-incidents.
+          APPEND VALUE #( %tky = <lfs_incident>-%tky
+                %state_area = 'VALIDATE_STATUS'
+                %msg = NEW zcl_msg_rap_nc( textid   = zcl_msg_rap_nc=>error_Responsable
+                                           responsable =  CONV zed_responsable_nc( lv_current_user )
+                                           severity = if_abap_behv_message=>severity-error )
+
+                %op-%action-changestatus = if_abap_behv=>mk-on
+               ) TO reported-incidents.
+
+          lv_error = abap_true.
+          EXIT.
+        ENDIF.
+
 
       ELSEIF <lfs_incident>-Status = lc_status-pending.
-
+        "----------------------------------------------------------------
+        " 5. Si esta en estado PE, no se puede pasar a CO(Completed),
+        "    CL -(Closed) , CN()Cancel
+        "----------------------------------------------------------------
         IF ls_key-%param-New_Status = lc_status-canceled OR
            ls_key-%param-New_Status = lc_status-completed OR
            ls_key-%param-New_Status = lc_status-closed.
@@ -141,7 +184,7 @@ CLASS lhc_Incidents IMPLEMENTATION.
           APPEND VALUE #( %tky = <lfs_incident>-%tky ) TO failed-incidents.
 
           APPEND VALUE #( %tky = <lfs_incident>-%tky
-                          %state_area = 'VALIDATE_INCIDENT'
+                          %state_area = 'VALIDATE_STATUS'
                           %msg = NEW zcl_msg_rap_nc( textid   = zcl_msg_rap_nc=>error_status
                                                      severity = if_abap_behv_message=>severity-error )
 
@@ -160,14 +203,19 @@ CLASS lhc_Incidents IMPLEMENTATION.
 
       CHECK lv_error = abap_false.
 
-*     " Agrego a la tabla el incidente a actualizar
+      "----------------------------------------------------------------
+      " 6. Agrego a la tabla el incidente a actualizar
+      "--------------------------------------------------------------
       APPEND VALUE #(  %tky = <lfs_incident>-%tky
                        Status = ls_key-%param-New_Status
                        ChangedDate = cl_abap_context_info=>get_system_date( )  ) TO lt_upd_inc.
 
 
-**   Recupero el proximo index de hisid para el incidente a tratar
-**   Por cada registro busco el numero de hisid para el mismo incidente
+      "----------------------------------------------------------------
+      " 7. Calcular el próximo HisId para este incidente puntual
+      "----------------------------------------------------------------
+***   Recupero el proximo index de hisid para el incidente a tratar
+***   Por cada registro busco el numero de hisid para el mismo incidente
       SELECT FROM zdt_inct_h_nc
       FIELDS  MAX( his_id )
       WHERE inc_uuid = @<lfs_incident>-IncUuid
@@ -179,13 +227,23 @@ CLASS lhc_Incidents IMPLEMENTATION.
         lv_last_hisid = lv_last_hisid + 1.
       ENDIF.
 
+      "----------------------------------------------------------------
+      " 8. Crear el registro de historial
+      "----------------------------------------------------------------
       APPEND VALUE #( %tky = <lfs_incident>-%tky
-                      %target = VALUE #( (
-                                            HisID = lv_last_hisid
+                      %target = VALUE #( (  %cid           = |H_{ sy-tabix }|
+                                            HisID          = lv_last_hisid
                                             PreviousStatus = <lfs_incident>-Status
-                                            NewStatus = ls_key-%param-New_Status
-                                            Text = ls_key-%param-description ) )
-                                             ) TO lt_new_history.
+                                            NewStatus      = ls_key-%param-New_Status
+                                            Text           = ls_key-%param-description
+                                            %control = VALUE #(
+                                                                HisID = if_abap_behv=>mk-on
+                                                                PreviousStatus = if_abap_behv=>mk-on
+                                                                NewStatus = if_abap_behv=>mk-on
+                                                                Text = if_abap_behv=>mk-on  )
+                                         ) )
+
+                       ) TO lt_new_history.
 
     ENDLOOP.
 
@@ -204,11 +262,12 @@ CLASS lhc_Incidents IMPLEMENTATION.
       FIELDS ( HisID PreviousStatus NewStatus Text )
        AUTO FILL CID
     WITH lt_new_history
-*      REPORTED DATA(ls_reported).
-     MAPPED mapped
-     FAILED failed
-     REPORTED reported.
+     REPORTED DATA(ls_reported)
+     FAILED failed.
 
+    "----------------------------------------------------------------
+    " 9. Releer los incidentes actualizados para armar el result
+    "----------------------------------------------------------------
 **  leo los datos de los registros ya actualizados
     READ ENTITIES OF zi_inct_nc IN LOCAL MODE
     ENTITY Incidents
@@ -227,6 +286,9 @@ CLASS lhc_Incidents IMPLEMENTATION.
 
   METHOD SetInitIncident.
 
+    "----------------------------------------------------------------
+    " 1. Leer el indice maximo de Incident_ID
+    "----------------------------------------------------------------
 *   recupero el valor maximo de incident en la tabla
     SELECT FROM zdt_inct_nc
       FIELDS  MAX( incident_id )
@@ -239,7 +301,9 @@ CLASS lhc_Incidents IMPLEMENTATION.
       lv_new_id = lv_new_id + 1.
     ENDIF.
 
-
+    "----------------------------------------------------------------
+    " 1. Actualizo los  incidentes
+    "----------------------------------------------------------------
     MODIFY ENTITIES OF zi_inct_nc IN LOCAL MODE
      ENTITY Incidents
        UPDATE FIELDS ( IncidentId Status CreatedDate ChangedDate )
@@ -316,7 +380,7 @@ CLASS lhc_Incidents IMPLEMENTATION.
 *      si la fecha de creacion esta vacia
         APPEND VALUE #( %tky = incident-%tky ) TO failed-incidents.
         APPEND VALUE #( %tky = incident-%tky
-                        %state_area = 'VALIDATE_INCIDENT'
+                        %state_area = 'VALIDATE_DATES'
                         %msg = NEW zcl_msg_rap_nc( textid   = zcl_msg_rap_nc=>empty_creation_date
                                                   severity = if_abap_behv_message=>severity-error )
                         %element-CreatedDate = if_abap_behv=>mk-on
@@ -329,7 +393,7 @@ CLASS lhc_Incidents IMPLEMENTATION.
         APPEND VALUE #( %tky = incident-%tky ) TO failed-incidents.
 
         APPEND VALUE #( %tky = incident-%tky
-                        %state_area = 'VALIDATE_INCIDENT'
+                        %state_area = 'VALIDATE_DATES'
                         %msg = NEW zcl_msg_rap_nc( textid   = zcl_msg_rap_nc=>future_date
                                                    lv_datum = cl_abap_context_info=>get_system_date( )
                                                    severity = if_abap_behv_message=>severity-error
@@ -343,7 +407,7 @@ CLASS lhc_Incidents IMPLEMENTATION.
         APPEND VALUE #( %tky = incident-%tky ) TO failed-incidents.
 
         APPEND VALUE #( %tky = incident-%tky
-                        %state_area = 'VALIDATE_INCIDENT'
+                        %state_area = 'VALIDATE_DATES'
                         %msg = NEW zcl_msg_rap_nc( textid   = zcl_msg_rap_nc=>error_changedate
                                                    severity = if_abap_behv_message=>severity-error )
                          %element-CreatedDate = if_abap_behv=>mk-on
@@ -365,24 +429,14 @@ CLASS lhc_Incidents IMPLEMENTATION.
     WITH CORRESPONDING #( keys )
     RESULT DATA(incidents).
 
-**  recupero los valores validos de prioridades
-*    SELECT FROM zdt_priority_nc
-*      FIELDS *
-*      INTO TABLE @DATA(lt_priority).
-
     LOOP AT incidents INTO DATA(incident).
 
       IF incident-Priority IS INITIAL.
         " si el campo esta vacio
         APPEND VALUE #( %tky = incident-%tky ) TO failed-incidents.
-*      ELSEIF NOT incident-Priority IS INITIAL  AND
-*         NOT  line_exists( lt_priority[ priority_code = incident-Priority ]  ).
-*        " Si el campo tiene dato pero no es una prioridad valida
-*
-*        APPEND VALUE #( %tky = incident-%tky ) TO failed-incidents.
 
         APPEND VALUE #( %tky = incident-%tky
-                        %state_area = 'VALIDATE_INCIDENT'
+                        %state_area = 'VALIDATE_PRIORITY'
                         %msg = NEW zcl_msg_rap_nc( textid   = zcl_msg_rap_nc=>empty_Priority
                                                    severity = if_abap_behv_message=>severity-error )
                         %element-priority = if_abap_behv=>mk-on
@@ -390,7 +444,6 @@ CLASS lhc_Incidents IMPLEMENTATION.
 
       ENDIF.
     ENDLOOP.
-
 
   ENDMETHOD.
 
@@ -412,7 +465,7 @@ CLASS lhc_Incidents IMPLEMENTATION.
         APPEND VALUE #( %tky = incident-%tky ) TO failed-incidents.
 
         APPEND VALUE #( %tky = incident-%tky
-                        %state_area = 'VALIDATE_INCIDENT'
+                        %state_area = 'VALIDATE_EMPTY_FIELD'
                         %msg = NEW zcl_msg_rap_nc( textid   = zcl_msg_rap_nc=>empty_title
                                                    severity = if_abap_behv_message=>severity-error )
                          %element-title = if_abap_behv=>mk-on
@@ -426,7 +479,7 @@ CLASS lhc_Incidents IMPLEMENTATION.
         APPEND VALUE #( %tky = incident-%tky ) TO failed-incidents.
 
         APPEND VALUE #(  %tky = incident-%tky
-                         %state_area = 'VALIDATE_INCIDENT'
+                         %state_area = 'VALIDATE_EMPTY_FIELD'
                          %msg = NEW zcl_msg_rap_nc( textid   = zcl_msg_rap_nc=>empty_Desc
                                                     severity = if_abap_behv_message=>severity-error )
 
