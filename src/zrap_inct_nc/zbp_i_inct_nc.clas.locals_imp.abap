@@ -255,7 +255,7 @@ CLASS lhc_Incidents IMPLEMENTATION.
     ENTITY Incidents
       CREATE BY \_History
       FIELDS ( HisID PreviousStatus NewStatus Text )
-       AUTO FILL CID
+      AUTO FILL CID
     WITH lt_new_history
      REPORTED DATA(ls_reported)
      FAILED failed.
