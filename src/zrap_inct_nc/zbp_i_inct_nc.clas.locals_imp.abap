@@ -120,7 +120,6 @@ CLASS lhc_Incidents IMPLEMENTATION.
         APPEND VALUE #( %tky = <lfs_incident>-%tky ) TO failed-incidents.
 
         APPEND VALUE #( %tky = <lfs_incident>-%tky
-                        %state_area = 'VALIDATE_STATUS'
                         %msg = NEW zcl_msg_rap_nc( textid   = zcl_msg_rap_nc=>empty_status
                                                    severity = if_abap_behv_message=>severity-error
                                                  )
@@ -140,12 +139,11 @@ CLASS lhc_Incidents IMPLEMENTATION.
           APPEND VALUE #( %tky = <lfs_incident>-%tky ) TO failed-incidents.
 
           APPEND VALUE #( %tky = <lfs_incident>-%tky
-                %state_area = 'VALIDATE_STATUS'
-                %msg = NEW zcl_msg_rap_nc( textid   = zcl_msg_rap_nc=>empty_Responsable
+                          %msg = NEW zcl_msg_rap_nc( textid   = zcl_msg_rap_nc=>empty_Responsable
                                            severity = if_abap_behv_message=>severity-error )
 
-                %op-%action-changestatus = if_abap_behv=>mk-on
-               ) TO reported-incidents.
+                          %op-%action-changestatus = if_abap_behv=>mk-on
+                        ) TO reported-incidents.
 
 
           lv_error = abap_true.
@@ -159,12 +157,10 @@ CLASS lhc_Incidents IMPLEMENTATION.
           "solo el Administrador Tiene permiso de cambiar a este estado
           APPEND VALUE #( %tky = <lfs_incident>-%tky ) TO failed-incidents.
           APPEND VALUE #( %tky = <lfs_incident>-%tky
-                %state_area = 'VALIDATE_STATUS'
-                %msg = NEW zcl_msg_rap_nc( textid   = zcl_msg_rap_nc=>error_Responsable
-                                           responsable =  CONV zed_responsable_nc( lv_current_user )
-                                           severity = if_abap_behv_message=>severity-error )
-
-                %op-%action-changestatus = if_abap_behv=>mk-on
+                          %msg = NEW zcl_msg_rap_nc( textid   = zcl_msg_rap_nc=>error_Responsable
+                                                     responsable =  CONV zed_responsable_nc( lv_current_user )
+                                                     severity = if_abap_behv_message=>severity-error )
+                          %op-%action-changestatus = if_abap_behv=>mk-on
                ) TO reported-incidents.
 
           lv_error = abap_true.
@@ -184,7 +180,6 @@ CLASS lhc_Incidents IMPLEMENTATION.
           APPEND VALUE #( %tky = <lfs_incident>-%tky ) TO failed-incidents.
 
           APPEND VALUE #( %tky = <lfs_incident>-%tky
-                          %state_area = 'VALIDATE_STATUS'
                           %msg = NEW zcl_msg_rap_nc( textid   = zcl_msg_rap_nc=>error_status
                                                      severity = if_abap_behv_message=>severity-error )
 
@@ -419,7 +414,6 @@ CLASS lhc_Incidents IMPLEMENTATION.
 
   ENDMETHOD.
 
-
   METHOD ValidatePriority.
 
 ***  leo los datos de los registros
@@ -444,7 +438,6 @@ CLASS lhc_Incidents IMPLEMENTATION.
 
       ENDIF.
     ENDLOOP.
-
   ENDMETHOD.
 
 
