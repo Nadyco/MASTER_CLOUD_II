@@ -226,16 +226,12 @@ CLASS lhc_Incidents IMPLEMENTATION.
       " 8. Crear el registro de historial
       "----------------------------------------------------------------
       APPEND VALUE #( %tky = <lfs_incident>-%tky
-                      %target = VALUE #( (  %cid           = |H_{ sy-tabix }|
+                      %target = VALUE #( (  "%cid           = |H_{ sy-tabix }|
                                             HisID          = lv_last_hisid
                                             PreviousStatus = <lfs_incident>-Status
                                             NewStatus      = ls_key-%param-New_Status
                                             Text           = ls_key-%param-description
-                                            %control = VALUE #(
-                                                                HisID = if_abap_behv=>mk-on
-                                                                PreviousStatus = if_abap_behv=>mk-on
-                                                                NewStatus = if_abap_behv=>mk-on
-                                                                Text = if_abap_behv=>mk-on  )
+
                                          ) )
 
                        ) TO lt_new_history.
